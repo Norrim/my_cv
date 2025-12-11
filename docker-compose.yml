@@ -1,0 +1,93 @@
+version: "3.9"
+
+services:
+    php:
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+        container_name: cvsite-php
+        volumes:
+            - .:/var/www/html
+        environment:
+            # Adapte si tu choisis MySQL
+            DATABASE_URL: "postgresql://symfony:symfony@db:5432/app?serverVersion=15&charset=utf8"
+            REDIS_URL: "redis://redis:6379"
+            # vhost "/" encodé -> %2f
+            MESSENGER_TRANSPORT_DSN: "amqp://guest:guest@rabbitmq:5672/%2f/messages"
+            MAILER_DSN: "smtp://mailhog:1025"
+        depends_on:
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+            rabbitmq:
+                condition: service_healthy
+
+    nginx:
+        image: nginx:1.27-alpine
+        container_name: cvsite-nginx
+        ports:
+            - "8080:80"
+        volumes:
+            - .:/var/www/html
+            - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+        depends_on:
+            php:
+                condition: service_started
+
+    db:
+        image: postgres:15
+        container_name: cvsite-postgres
+        environment:
+            POSTGRES_DB: app
+            POSTGRES_USER: symfony
+            POSTGRES_PASSWORD: symfony
+        volumes:
+            - db-data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U symfony -d app" ]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+
+
+    redis:
+        image: redis:7-alpine
+        container_name: cvsite-redis
+        command: ["redis-server", "--appendonly", "no"]
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 5s
+            timeout: 3s
+            retries: 20
+
+    rabbitmq:
+        image: rabbitmq:3.13-management
+        container_name: cvsite-rabbitmq
+        ports:
+            - "15672:15672" # UI
+            - "5672:5672"   # AMQP
+        environment:
+            RABBITMQ_DEFAULT_USER: guest
+            RABBITMQ_DEFAULT_PASS: guest
+        healthcheck:
+            test: ["CMD-SHELL", "rabbitmq-diagnostics -q ping"]
+            interval: 5s
+            timeout: 5s
+            retries: 20
+
+    mailhog:
+        image: mailhog/mailhog:latest
+        container_name: cvsite-mailhog
+        ports:
+            - "8025:8025" # UI
+        healthcheck:
+            test: ["CMD", "nc", "-z", "localhost", "1025"]
+            interval: 5s
+            timeout: 3s
+            retries: 20
+
+volumes:
+    db-data:
