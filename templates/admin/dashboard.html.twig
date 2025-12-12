@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard admin{% endblock %}
+
+{% block body %}
+    <h1>Admin Dashboard</h1>
+
+    <p>Bienvenue, {{ app.user.email }} </p>
+
+    <form method="post" action="{{ path('app_logout') }}">
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('logout') }}">
+        <button type="submit">Déconnexion</button>
+    </form>
+{% endblock %}
