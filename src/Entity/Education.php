@@ -8,8 +8,11 @@ use App\Repository\EducationRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: EducationRepository::class)]
+#[Assert\Callback('validateDates')]
 class Education
 {
     #[ORM\Id]
@@ -18,12 +21,17 @@ class Education
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $school = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Assert\NotNull]
     private ?DateTimeImmutable $startDate = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
@@ -33,6 +41,8 @@ class Education
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?int $position = null;
 
     public function getId(): ?int
@@ -110,5 +120,14 @@ class Education
         $this->position = $position;
 
         return $this;
+    }
+
+    public function validateDates(ExecutionContextInterface $context): void
+    {
+        if ($this->endDate !== null && $this->startDate !== null && $this->endDate < $this->startDate) {
+            $context->buildViolation('La date de fin ne peut pas être antérieure à la date de début.')
+                ->atPath('endDate')
+                ->addViolation();
+        }
     }
 }

@@ -59,15 +59,27 @@
 
             <!-- Content -->
             <div class="col-12 col-md-12 col-xl-9">
+
                 <div class="box-outer">
+                    <div class="container">
+                        {% for label, messages in app.flashes %}
+                            {% set bsLabel = (label == 'error') ? 'danger' : label %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ bsLabel }} alert-dismissible fade show mt-5" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
                     <!-- Menu -->
                     <div class="nav-container js-tabs">
                         <ul class="nav" id="myTab" role="tablist">
-                            <li class="nav__item" role="presentation"><a id="about-tab" class="active" href="#about" data-bs-toggle="tab" role="tab" aria-controls="about" aria-selected="true">About</a></li>
-                            <li class="nav__item" role="presentation"><a id="resume-tab" href="#resume" data-bs-toggle="tab" role="tab" aria-controls="resume" aria-selected="false">Resume</a></li>
-                            <li class="nav__item" role="presentation"><a id="portfolio-tab" href="#portfolio" data-bs-toggle="tab" role="tab" aria-controls="portfolio" aria-selected="false">Portfolio</a></li>
-                            <li class="nav__item" role="presentation"><a id="blog-tab" href="#blog" data-bs-toggle="tab" role="tab" aria-controls="blog" aria-selected="false">Blog</a></li>
-                            <li class="nav__item" role="presentation"><a id="contact-tab" href="#contact" data-bs-toggle="tab" role="tab" aria-controls="contact" aria-selected="false">Contact</a></li>
+                            <li class="nav__item" role="presentation"><a id="about-tab" class="active" href="#about" data-bs-toggle="tab" role="tab" aria-controls="about" aria-selected="true">{{ 'nav.about'|trans }}</a></li>
+                            <li class="nav__item" role="presentation"><a id="resume-tab" href="#resume" data-bs-toggle="tab" role="tab" aria-controls="resume" aria-selected="false">{{ 'nav.resume'|trans }}</a></li>
+                            <li class="nav__item" role="presentation"><a id="portfolio-tab" href="#portfolio" data-bs-toggle="tab" role="tab" aria-controls="portfolio" aria-selected="false">{{ 'nav.portfolio'|trans }}</a></li>
+                            <li class="nav__item" role="presentation"><a id="blog-tab" href="#blog" data-bs-toggle="tab" role="tab" aria-controls="blog" aria-selected="false">{{ 'nav.blog'|trans }}</a></li>
+                            <li class="nav__item" role="presentation"><a id="contact-tab" href="#contact" data-bs-toggle="tab" role="tab" aria-controls="contact" aria-selected="false">{{ 'nav.contact'|trans }}</a></li>
                         </ul>
                     </div>
 
@@ -224,7 +236,6 @@
                             {% include 'resume/experiences.html.twig' %}
                             {% include 'resume/skills.html.twig' %}
                         </div>
-
                         <!-- PORTFOLIO -->
                         <div id="portfolio" class="tab-pane fade _tabcontent" role="tabpanel" aria-labelledby="portfolio-tab">
                             <div class="pb-3">
@@ -484,7 +495,7 @@
                                         <div id="validator-contact" class="hidden"></div>
                                     </div>
                                     <div class="col-12 col-md-6 order-1 order-md-2 text-end">
-                                        <button type="submit" class="btn"><i class="font-icon icon-send"></i> Send Message</button>
+                                        <button type="submit" class="btn"><i class="font-icon icon-send"></i> {{ 'contact.send'|trans }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -577,4 +588,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
