@@ -1,28 +1,14 @@
 <!-- Skills -->
-<h2 class="title title--h2 mt-3">My Skills</h2>
+<h2 class="title title--h2 mt-3">Mes compétences</h2>
 <div class="box box-inner mb-0">
-    <!-- Web Design -->
-    <div class="progress">
-        <div class="progress-text"><span>Web Design</span> 80%</div>
-        <div class="progress-bar"><span role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></span></div>
-    </div>
-
-    <!-- Web Design -->
-    <div class="progress">
-        <div class="progress-text"><span>Graphic Design</span> 75%</div>
-        <div class="progress-bar"><span role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></span></div>
-    </div>
-
-    <!-- Web Design -->
-    <div class="progress">
-        <div class="progress-text"><span>Branding</span> 90%</div>
-        <div class="progress-bar"><span role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></span></div>
-    </div>
-
-    <!-- Web Design -->
-    <div class="progress">
-        <div class="progress-text"><span>WordPress</span> 50%</div>
-        <div class="progress-bar"><span role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></span></div>
-    </div>
-</div>
+    {% if skills is defined and skills|length > 0 %}
+        {% for skill in skills %}
+            <div class="progress">
+                <div class="progress-text"><span>{{ skill.name }}</span> {{ skill.percentage }}%</div>
+                <div class="progress-bar"><span role="progressbar" aria-valuenow="{{ skill.percentage }}" aria-valuemin="0" aria-valuemax="100"></span></div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Aucune compétence pour le moment.</p>
+    {% endif %}
 </div>
