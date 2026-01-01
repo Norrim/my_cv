@@ -18,7 +18,7 @@
                 {% if education.endDate %} — {{ education.endDate|format_date(locale='fr', pattern='MMMM y') }}{% endif %}
             </span>
             {% if education.description %}
-                <p class="timeline__description">{{ education.description }}</p>
+                <p class="timeline__description">{{ education.description|raw }}</p>
             {% endif %}
 
             {% if is_granted('ROLE_ADMIN') %}
@@ -102,6 +102,10 @@
                 return;
             }
             const method = (form.getAttribute('method') || 'POST').toUpperCase();
+            // S'assure que le contenu TinyMCE est synchronisé dans le textarea
+            if (window.tinymce && typeof tinymce.triggerSave === 'function') {
+                tinymce.triggerSave();
+            }
             const formData = new FormData(form);
 
             try {
@@ -124,6 +128,7 @@
                 // 200/422 avec HTML (form re-rendu + erreurs)
                 const html = await res.text();
                 modalContentEl.innerHTML = html;
+                if (window.initTinyMCE) { window.initTinyMCE(); }
                 attachFormHandler();
             } catch (err) {
                 console.error('Submission error', err);
@@ -136,6 +141,7 @@
             const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
             const html = await res.text();
             modalContentEl.innerHTML = html;
+            if (window.initTinyMCE) { window.initTinyMCE(); }
             attachFormHandler();
             bootstrapModalShow();
         } catch (err) {
