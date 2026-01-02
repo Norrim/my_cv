@@ -73,5 +73,28 @@ resume:
             position:
                 label: "Position"
 
+    skills:
+        title: "Compétences"
+
+    skill:
+        modal:
+            title: "Compétence"
+            new:
+                title: "Ajouter une compétence"
+            edit:
+                title: "Modifier la compétence"
+        flash:
+            created: "Compétence créée avec succès."
+            updated: "Compétence mise à jour."
+            deleted: "Compétence supprimée."
+            csrf_invalid: "Jeton CSRF invalide."
+        form:
+            name:
+                label: "Nom"
+            percentage:
+                label: "Pourcentage"
+            position:
+                label: "Position"
+
 contact:
     send: "Envoyer le message"

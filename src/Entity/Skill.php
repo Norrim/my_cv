@@ -21,7 +21,7 @@ class Skill
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Assert\Range(min: 1, max: 100)]
+    #[Assert\Range(min: 0, max: 100 )]
     private ?int $percentage = null;
 
     #[ORM\Column]

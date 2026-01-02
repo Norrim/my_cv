@@ -1,14 +1,167 @@
 <!-- Skills -->
-<h2 class="title title--h2 mt-3">Mes compétences</h2>
+<h2 class="title title--h2 mt-3 d-flex align-items-center justify-content-between">
+    <span>{{ 'resume.skills.title'|trans }}</span>
+        {% if is_granted('ROLE_ADMIN') %}
+            <button type="button" class="btn js-open-skill-modal" data-url="{{ path('skill_new') }}">
+        <i class="feathericon-plus"></i> {{ 'global.add'|trans }}
+    </button>
+        {% endif %}
+
+</h2>
+
 <div class="box box-inner mb-0">
     {% if skills is defined and skills|length > 0 %}
         {% for skill in skills %}
             <div class="progress">
-                <div class="progress-text"><span>{{ skill.name }}</span> {{ skill.percentage }}%</div>
+                <div class="progress-text"><span>{{ skill.name }}</span></div>
                 <div class="progress-bar"><span role="progressbar" aria-valuenow="{{ skill.percentage }}" aria-valuemin="0" aria-valuemax="100"></span></div>
             </div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="mt-2 d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-secondary js-open-skill-modal" data-url="{{ path('skill_edit', {id: skill.id}) }}">
+                        <i class="feathericon-edit"></i> {{ 'global.edit'|trans }}
+                    </button>
+                    <form method="post" action="{{ path('skill_delete', {id: skill.id}) }}" onsubmit="return confirm('{{ 'global.delete_confirm'|trans }}');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_skill_' ~ skill.id) }}">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="feathericon-delete"></i> {{ 'global.delete'|trans }}
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
         {% endfor %}
     {% else %}
         <p>Aucune compétence pour le moment.</p>
+
     {% endif %}
+
 </div>
+
+{# Modal Bootstrap réutilisable #}
+<div class="modal fade" id="skillModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content box box-inner" id="skillModalContent">
+            {# Le contenu du formulaire sera chargé ici via fetch() #}
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const modalEl = document.getElementById('skillModal');
+        const modalContentEl = document.getElementById('skillModalContent');
+
+        function getModalInstance(el) {
+            if (window.bootstrap && bootstrap.Modal) {
+                // Bootstrap >= 5.2
+                if (typeof bootstrap.Modal.getOrCreateInstance === 'function') {
+                    return bootstrap.Modal.getOrCreateInstance(el);
+                }
+                // Bootstrap 5.0/5.1
+                if (typeof bootstrap.Modal.getInstance === 'function') {
+                    return bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
+                }
+                // Dernier recours
+                return new bootstrap.Modal(el);
+            }
+            return null;
+        }
+
+        function bootstrapModalShow() {
+            const modal = getModalInstance(modalEl);
+            if (modal) {
+                modal.show();
+            } else {
+                // Fallback très simple si Bootstrap JS n'est pas chargé
+                modalEl.style.display = 'block';
+                modalEl.classList.add('show');
+            }
+        }
+
+        function bootstrapModalHide() {
+            const modal = getModalInstance(modalEl);
+            if (modal) {
+                modal.hide();
+            } else {
+                modalEl.style.display = 'none';
+                modalEl.classList.remove('show');
+            }
+        }
+
+        function attachFormHandler() {
+            const form = modalContentEl.querySelector('form');
+            if (!form) return;
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const action = form.getAttribute('action');
+                if (!action) {
+                    console.error('Form action manquante');
+                    return;
+                }
+                const method = (form.getAttribute('method') || 'POST').toUpperCase();
+                // S'assure que le contenu TinyMCE est synchronisé dans le textarea
+                if (window.tinymce && typeof tinymce.triggerSave === 'function') {
+                    tinymce.triggerSave();
+                }
+                const formData = new FormData(form);
+
+                try {
+                    const res = await fetch(action, {
+                        method: method,
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                        body: formData
+                    });
+
+                    const contentType = res.headers.get('content-type') || '';
+
+                    if (contentType.includes('application/json')) {
+                        const data = await res.json();
+                        if (data.reload) {
+                            window.location.reload();
+                            return;
+                        }
+                    }
+
+                    // 200/422 avec HTML (form re-rendu + erreurs)
+                    const html = await res.text();
+                    modalContentEl.innerHTML = html;
+                    if (window.initTinyMCE) { window.initTinyMCE(); }
+                    attachFormHandler();
+                } catch (err) {
+                    console.error('Submission error', err);
+                }
+            }, { once: true });
+        }
+
+        async function openSkillModal(url) {
+            try {
+                const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                const html = await res.text();
+                modalContentEl.innerHTML = html;
+                if (window.initTinyMCE) { window.initTinyMCE(); }
+                attachFormHandler();
+                bootstrapModalShow();
+            } catch (err) {
+                console.error('Modal load error', err);
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const trigger = e.target.closest('.js-open-skill-modal');
+            if (!trigger) return;
+            e.preventDefault();
+            const url = trigger.getAttribute('data-url');
+            if (url) openSkillModal(url);
+        });
+
+        // Fermer la modale si on clique sur un bouton [data-bs-dismiss="modal"] en fallback
+        modalEl.addEventListener('click', function(e) {
+            const dismiss = e.target.closest('[data-bs-dismiss="modal"]');
+            if (dismiss && !(window.bootstrap && bootstrap.Modal)) {
+                bootstrapModalHide();
+            }
+        });
+    })();
+</script>
