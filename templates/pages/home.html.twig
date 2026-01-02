@@ -43,11 +43,39 @@
     {# Mapbox JS (via CDN, requis par le template) #}
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
 
+    {# TinyMCE (CDN) + initialisation globale #}
+    <script src="https://cdn.tiny.cloud/1/{{ tinymce_api_key }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        window.initTinyMCE = function() {
+            if (!window.tinymce) { return; }
+            try { tinymce.remove(); } catch (e) {}
+            tinymce.init({
+                selector: 'textarea.tinymce',
+                menubar: false,
+                branding: false,
+                height: 220,
+                plugins: 'lists link code autosave',
+                toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link | removeformat | code',
+                entity_encoding: 'raw',
+                convert_urls: false,
+                skin: 'oxide-dark',
+                content_css: 'dark'
+            });
+        };
+        document.addEventListener('DOMContentLoaded', function(){
+            if (document.querySelector('textarea.tinymce')) {
+                window.initTinyMCE();
+            }
+        });
+    </script>
+
     {# JS locaux #}
     <script src="{{ asset('assets/js/jquery-3.4.1.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins.min.js') }}"></script>
     <script src="{{ asset('assets/js/common.js') }}"></script>
     <script src="{{ asset('assets/js/mapbox.init.js') }}"></script>
+
+    {% include 'partials/js/_crud_modal_scripts.html.twig' %}
 {% endblock %}
 
 {% block body %}
@@ -55,22 +83,16 @@
     <div class="container gutter-top gutter-bottom">
         <div class="row sticky-parent">
             <!-- Sidebar -->
-            {% include 'home/informations.html.twig' %}
+            {% include 'partials/_sidebar.html.twig' %}
 
             <!-- Content -->
             <div class="col-12 col-md-12 col-xl-9">
 
+                {% include 'partials/_crud_modal.html.twig' %}
+
                 <div class="box-outer">
                     <div class="container">
-                        {% for label, messages in app.flashes %}
-                            {% set bsLabel = (label == 'error') ? 'danger' : label %}
-                            {% for message in messages %}
-                                <div class="alert alert-{{ bsLabel }} alert-dismissible fade show mt-5" role="alert">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            {% endfor %}
-                        {% endfor %}
+                        {% include 'partials/_flash.html.twig' %}
                     </div>
                     <!-- Menu -->
                     <div class="nav-container js-tabs">
@@ -227,9 +249,9 @@
                                 <h1 class="title title--h1 title__separate">{{ 'nav.resume'|trans }}</h1>
                             </div>
 
-                            {% include 'resume/educations.html.twig' %}
-                            {% include 'resume/experiences.html.twig' %}
-                            {% include 'resume/skills.html.twig' %}
+                            {% include 'resume/education/_educations.html.twig' %}
+                            {% include 'resume/experience/_experiences.html.twig' %}
+                            {% include 'resume/skill/_skills.html.twig' %}
                         </div>
                         <!-- PORTFOLIO -->
                         <div id="portfolio" class="tab-pane fade _tabcontent" role="tabpanel" aria-labelledby="portfolio-tab">

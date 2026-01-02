@@ -9,9 +9,10 @@ use App\Repository\ExperienceRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ExperienceRepository::class)]
-class Experience
+final class Experience
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,12 +20,17 @@ class Experience
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $company = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Assert\NotNull]
     private ?DateTimeImmutable $startDate = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
@@ -34,6 +40,8 @@ class Experience
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?int $position = null;
 
     public function getId(): ?int
@@ -46,7 +54,7 @@ class Experience
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -58,7 +66,7 @@ class Experience
         return $this->company;
     }
 
-    public function setCompany(string $company): static
+    public function setCompany(string $company): self
     {
         $this->company = $company;
 
@@ -70,7 +78,7 @@ class Experience
         return $this->startDate;
     }
 
-    public function setStartDate(DateTimeImmutable $startDate): static
+    public function setStartDate(DateTimeImmutable $startDate): self
     {
         $this->startDate = $startDate;
 
@@ -82,7 +90,7 @@ class Experience
         return $this->endDate;
     }
 
-    public function setEndDate(?DateTimeImmutable $endDate): static
+    public function setEndDate(?DateTimeImmutable $endDate): self
     {
         $this->endDate = $endDate;
 
@@ -94,7 +102,7 @@ class Experience
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -106,7 +114,7 @@ class Experience
         return $this->position;
     }
 
-    public function setPosition(int $position): static
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 

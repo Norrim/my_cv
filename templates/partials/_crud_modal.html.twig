@@ -1,0 +1,9 @@
+{% if is_granted('ROLE_ADMIN') %}
+<div class="modal fade" id="crudModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content box box-inner" id="crudModalContent">
+            {# Le contenu du formulaire sera chargé ici via fetch() #}
+        </div>
+    </div>
+</div>
+{% endif %}

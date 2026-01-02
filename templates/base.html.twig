@@ -7,32 +7,6 @@
         {% block stylesheets %}
         {% endblock %}
 
-        {# TinyMCE (CDN) + initialisation globale #}
-        <script src="https://cdn.tiny.cloud/1/{{ tinymce_api_key }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-        <script>
-            window.initTinyMCE = function() {
-                if (!window.tinymce) { return; }
-                try { tinymce.remove(); } catch (e) {}
-                tinymce.init({
-                    selector: 'textarea.tinymce',
-                    menubar: false,
-                    branding: false,
-                    height: 220,
-                    plugins: 'lists link code autosave',
-                    toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link | removeformat | code',
-                    entity_encoding: 'raw',
-                    convert_urls: false,
-                    skin: 'oxide-dark',
-                    content_css: 'dark'
-                });
-            };
-            document.addEventListener('DOMContentLoaded', function(){
-                if (document.querySelector('textarea.tinymce')) {
-                    window.initTinyMCE();
-                }
-            });
-        </script>
-
         {% block javascripts %}
         {% endblock %}
     </head>

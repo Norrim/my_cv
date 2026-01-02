@@ -1,0 +1,17 @@
+<div class="progress">
+    <div class="progress-text"><span>{{ name }}</span></div>
+    <div class="progress-bar"><span role="progressbar" aria-valuenow="{{ percentage }}" aria-valuemin="0" aria-valuemax="100"></span></div>
+</div>
+{% if is_granted('ROLE_ADMIN') %}
+    <div class="mt-2 mb-3 d-flex gap-2">
+        <button type="button" class="btn btn-sm btn-secondary js-open-crud-modal" data-url="{{ editPath }}">
+            <i class="feathericon-edit"></i> {{ 'global.edit'|trans }}
+        </button>
+        <form method="post" action="{{ deletePath }}" onsubmit="return confirm('{{ 'global.delete_confirm'|trans }}');">
+            <input type="hidden" name="_token" value="{{ csrf_token(deleteTokenName) }}">
+            <button type="submit" class="btn btn-sm btn-danger">
+                <i class="feathericon-delete"></i> {{ 'global.delete'|trans }}
+            </button>
+        </form>
+    </div>
+{% endif %}

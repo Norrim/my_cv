@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: EducationRepository::class)]
 #[Assert\Callback('validateDates')]
-class Education
+final class Education
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -55,7 +55,7 @@ class Education
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -67,7 +67,7 @@ class Education
         return $this->school;
     }
 
-    public function setSchool(string $school): static
+    public function setSchool(string $school): self
     {
         $this->school = $school;
 
@@ -79,7 +79,7 @@ class Education
         return $this->startDate;
     }
 
-    public function setStartDate(DateTimeImmutable $startDate): static
+    public function setStartDate(DateTimeImmutable $startDate): self
     {
         $this->startDate = $startDate;
 
@@ -91,7 +91,7 @@ class Education
         return $this->endDate;
     }
 
-    public function setEndDate(?DateTimeImmutable $endDate): static
+    public function setEndDate(?DateTimeImmutable $endDate): self
     {
         $this->endDate = $endDate;
 
@@ -103,7 +103,7 @@ class Education
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -115,7 +115,7 @@ class Education
         return $this->position;
     }
 
-    public function setPosition(int $position): static
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SocialRepository::class)]
-class Social
+final class Social
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -42,7 +42,7 @@ class Social
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -54,7 +54,7 @@ class Social
         return $this->url;
     }
 
-    public function setUrl(string $url): static
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 
@@ -66,7 +66,7 @@ class Social
         return $this->iconClass;
     }
 
-    public function setIconClass(string $iconClass): static
+    public function setIconClass(string $iconClass): self
     {
         $this->iconClass = $iconClass;
 
@@ -78,7 +78,7 @@ class Social
         return $this->position;
     }
 
-    public function setPosition(int $position): static
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 

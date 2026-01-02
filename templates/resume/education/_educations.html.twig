@@ -1,0 +1,25 @@
+<h2 class="title title--h2 d-flex align-items-center justify-content-between">
+    <span><span class="box icon-box"><i class="font-icon feathericon-book-open"></i></span>{{ 'resume.educations.title'|trans }}</span>
+    {% if is_granted('ROLE_ADMIN') %}
+        <button type="button" class="btn js-open-crud-modal" data-url="{{ path('education_new') }}">
+            <i class="feathericon-plus"></i> {{ 'global.add'|trans }}
+        </button>
+    {% endif %}
+
+</h2>
+
+<div class="timeline">
+    {% for education in educations %}
+        {% include 'components/_timeline_item.html.twig' with {
+            'title': education.school ~ ' - ' ~ education.title,
+            'startDate': education.startDate,
+            'endDate': education.endDate,
+            'description': education.description,
+            'editPath': path('education_edit', {id: education.id}),
+            'deletePath': path('education_delete', {id: education.id}),
+            'deleteTokenName': 'delete_education_' ~ education.id
+        } %}
+    {% endfor %}
+</div>
+
+

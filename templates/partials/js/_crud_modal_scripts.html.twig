@@ -1,0 +1,116 @@
+{% if is_granted('ROLE_ADMIN') %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modalEl = document.getElementById('crudModal');
+        const modalContentEl = document.getElementById('crudModalContent');
+
+        if (!modalEl || !modalContentEl) return;
+
+        function getModalInstance(el) {
+            if (window.bootstrap && bootstrap.Modal) {
+                if (typeof bootstrap.Modal.getOrCreateInstance === 'function') {
+                    return bootstrap.Modal.getOrCreateInstance(el);
+                }
+                if (typeof bootstrap.Modal.getInstance === 'function') {
+                    return bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
+                }
+                return new bootstrap.Modal(el);
+            }
+            return null;
+        }
+
+        function bootstrapModalShow() {
+            const modal = getModalInstance(modalEl);
+            if (modal) {
+                modal.show();
+            } else {
+                modalEl.style.display = 'block';
+                modalEl.classList.add('show');
+            }
+        }
+
+        function bootstrapModalHide() {
+            const modal = getModalInstance(modalEl);
+            if (modal) {
+                modal.hide();
+            } else {
+                modalEl.style.display = 'none';
+                modalEl.classList.remove('show');
+            }
+        }
+
+        function attachFormHandler() {
+            const form = modalContentEl.querySelector('form');
+            if (!form) return;
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const action = form.getAttribute('action');
+                if (!action) return;
+
+                const method = (form.getAttribute('method') || 'POST').toUpperCase();
+
+                if (window.tinymce && typeof tinymce.triggerSave === 'function') {
+                    tinymce.triggerSave();
+                }
+
+                const formData = new FormData(form);
+
+                try {
+                    const res = await fetch(action, {
+                        method: method,
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                        body: formData
+                    });
+
+                    const contentType = res.headers.get('content-type') || '';
+
+                    if (contentType.includes('application/json')) {
+                        const data = await res.json();
+                        if (data.reload) {
+                            window.location.reload();
+                            return;
+                        }
+                    }
+
+                    const html = await res.text();
+                    modalContentEl.innerHTML = html;
+                    if (window.initTinyMCE) { window.initTinyMCE(); }
+                    attachFormHandler();
+                } catch (err) {
+                    console.error('Submission error', err);
+                }
+            }, { once: true });
+        }
+
+        async function openCrudModal(url) {
+            try {
+                const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                const html = await res.text();
+                modalContentEl.innerHTML = html;
+                if (window.initTinyMCE) { window.initTinyMCE(); }
+                attachFormHandler();
+                bootstrapModalShow();
+            } catch (err) {
+                console.error('Modal load error', err);
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const trigger = e.target.closest('.js-open-crud-modal');
+            if (!trigger) return;
+            e.preventDefault();
+            const url = trigger.getAttribute('data-url');
+            if (url) openCrudModal(url);
+        });
+
+        modalEl.addEventListener('click', function(e) {
+            const dismiss = e.target.closest('[data-bs-dismiss="modal"]');
+            if (dismiss && !(window.bootstrap && bootstrap.Modal)) {
+                bootstrapModalHide();
+            }
+        });
+    });
+</script>
+{% endif %}

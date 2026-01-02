@@ -1,26 +1,18 @@
-{{ form_start(form, { attr: { id: 'skill-form' } }) }}
+{% extends 'partials/_form_modal_base.html.twig' %}
 
-        <h5 class="modal-title title__separate">{{ title|default(('resume.skill.modal.title')|trans) }}</h5>
+{% set form_id = 'skill-form' %}
 
-        {{ form_errors(form) }}
-        <div class="row g-3">
-            <div class="form-group col-12 col-md-6">{{ form_row(form.name, {
-                'label': ('resume.skill.form.name.label')|trans,
-                'attr': {'class': 'input form-control'}
-            }) }}</div>
-            <div class="form-group col-12 col-md-6">{{ form_row(form.percentage, {
-                'label': ('resume.skill.form.percentage.label')|trans,
-                'attr': {'class': 'input form-control'}
-            }) }}</div>
-            <div class="form-group col-12 col-md-4">{{ form_row(form.position, {
-                'label': ('resume.skill.form.position.label')|trans,
-                'attr': {'class': 'input form-control'}
-            }) }}</div>
-        </div>
-
-
-
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ 'global.cancel'|trans }}</button>
-        <button type="submit" class="btn btn-primary">{{ 'global.save'|trans }}</button>
-
-{{ form_end(form, { render_rest: true }) }}
+{% block form_body %}
+    <div class="form-group col-12 col-md-6">{{ form_row(form.name, {
+        'label': ('resume.skill.form.name.label')|trans,
+        'attr': {'class': 'input form-control'}
+    }) }}</div>
+    <div class="form-group col-12 col-md-6">{{ form_row(form.percentage, {
+        'label': ('resume.skill.form.percentage.label')|trans,
+        'attr': {'class': 'input form-control'}
+    }) }}</div>
+    <div class="form-group col-12 col-md-4">{{ form_row(form.position, {
+        'label': ('resume.skill.form.position.label')|trans,
+        'attr': {'class': 'input form-control'}
+    }) }}</div>
+{% endblock %}

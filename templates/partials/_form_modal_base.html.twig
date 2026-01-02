@@ -1,0 +1,13 @@
+{{ form_start(form, { attr: { id: form_id|default('crud-form') } }) }}
+    <h5 class="modal-title title__separate">{{ title }}</h5>
+    {{ form_errors(form) }}
+
+    <div class="row g-3">
+        {% block form_body %}{% endblock %}
+    </div>
+
+    <div class="mt-4">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ 'global.cancel'|trans }}</button>
+        <button type="submit" class="btn btn-primary">{{'global.save'|trans }}</button>
+    </div>
+{{ form_end(form, { render_rest: true }) }}

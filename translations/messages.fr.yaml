@@ -7,6 +7,16 @@ global:
     delete_confirm: "Confirmer la suppression ?"
     in_progress: "En cours"
 
+crud:
+    modal:
+        new: "Ajouter %label%"
+        edit: "Modifier %label%"
+    flash:
+        created: "%label% créé(e) avec succès."
+        updated: "%label% mis(e) à jour."
+        deleted: "%label% supprimé(e)."
+        csrf_invalid: "Jeton CSRF invalide."
+
 nav:
     about: "À propos"
     resume: "CV"
@@ -21,15 +31,6 @@ resume:
     education:
         modal:
             title: "Formation"
-            new:
-                title: "Ajouter une formation"
-            edit:
-                title: "Modifier la formation"
-        flash:
-            created: "Formation créée avec succès."
-            updated: "Formation mise à jour."
-            deleted: "Formation supprimée."
-            csrf_invalid: "Jeton CSRF invalide."
         form:
             title:
                 label: "Intitulé"
@@ -50,15 +51,6 @@ resume:
     experience:
         modal:
             title: "Expérience"
-            new:
-                title: "Ajouter une expérience"
-            edit:
-                title: "Modifier la expérience"
-        flash:
-            created: "Expérience créée avec succès."
-            updated: "Expérience mise à jour."
-            deleted: "Expérience supprimée."
-            csrf_invalid: "Jeton CSRF invalide."
         form:
             title:
                 label: "Intitulé"
@@ -79,15 +71,6 @@ resume:
     skill:
         modal:
             title: "Compétence"
-            new:
-                title: "Ajouter une compétence"
-            edit:
-                title: "Modifier la compétence"
-        flash:
-            created: "Compétence créée avec succès."
-            updated: "Compétence mise à jour."
-            deleted: "Compétence supprimée."
-            csrf_invalid: "Jeton CSRF invalide."
         form:
             name:
                 label: "Nom"

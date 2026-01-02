@@ -30,3 +30,6 @@ phpstan.neon
 /.idea/
 *.iml
 .DS_Store
+
+#Junie
+.junie/guidelines.md

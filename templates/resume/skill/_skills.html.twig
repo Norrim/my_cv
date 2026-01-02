@@ -1,0 +1,29 @@
+<!-- Skills -->
+<h2 class="title title--h2 mt-3 d-flex align-items-center justify-content-between">
+    <span>{{ 'resume.skills.title'|trans }}</span>
+        {% if is_granted('ROLE_ADMIN') %}
+            <button type="button" class="btn js-open-crud-modal" data-url="{{ path('skill_new') }}">
+        <i class="feathericon-plus"></i> {{ 'global.add'|trans }}
+    </button>
+        {% endif %}
+
+</h2>
+
+<div class="box box-inner mb-0">
+    {% if skills is defined and skills|length > 0 %}
+        {% for skill in skills %}
+            {% include 'components/_skill_item.html.twig' with {
+                'name': skill.name,
+                'percentage': skill.percentage,
+                'editPath': path('skill_edit', {id: skill.id}),
+                'deletePath': path('skill_delete', {id: skill.id}),
+                'deleteTokenName': 'delete_skill_' ~ skill.id
+            } %}
+        {% endfor %}
+    {% else %}
+        <p>Aucune compétence pour le moment.</p>
+
+    {% endif %}
+
+</div>
+

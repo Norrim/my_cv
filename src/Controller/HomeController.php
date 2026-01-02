@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Repository\EducationRepository;
@@ -8,7 +10,7 @@ use App\Repository\SkillRepository;
 use App\Repository\SocialRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class HomeController extends AbstractController
 {
@@ -17,17 +19,17 @@ final class HomeController extends AbstractController
         private readonly ExperienceRepository $experienceRepository,
         private readonly SkillRepository $skillRepository,
         private readonly SocialRepository $socialRepository,
-    ){}
+    ) {}
 
     #[Route(path: '/', name: 'app_home', methods: ['GET'])]
-    public function index(EducationRepository $educationRepository): Response
+    public function index(): Response
     {
         $educations = $this->educationRepository->findBy([], ['position' => 'ASC']);
         $experiences = $this->experienceRepository->findBy([], ['position' => 'ASC']);
         $skills = $this->skillRepository->findBy([], ['position' => 'ASC']);
         $socials = $this->socialRepository->findBy([], ['id' => 'ASC']);
 
-        return $this->render('home/index.html.twig', [
+        return $this->render('pages/home.html.twig', [
             'educations' => $educations,
             'experiences' => $experiences,
             'skills' => $skills,

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SkillRepository::class)]
-class Skill
+final class Skill
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,10 +21,12 @@ class Skill
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Assert\Range(min: 0, max: 100 )]
+    #[Assert\Range(min: 0, max: 100)]
     private ?int $percentage = null;
 
     #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private ?int $position = null;
 
     public function getId(): ?int
@@ -37,7 +39,7 @@ class Skill
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -49,7 +51,7 @@ class Skill
         return $this->percentage;
     }
 
-    public function setPercentage(int $percentage): static
+    public function setPercentage(int $percentage): self
     {
         $this->percentage = $percentage;
 
@@ -61,7 +63,7 @@ class Skill
         return $this->position;
     }
 
-    public function setPosition(int $position): static
+    public function setPosition(int $position): self
     {
         $this->position = $position;
 
