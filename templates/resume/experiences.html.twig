@@ -1,12 +1,165 @@
 <!-- Experience -->
-<h2 class="title title--h2"><span class="box icon-box"><i class="font-icon feathericon-briefcase"></i></span>Expériences professionnelles</h2>
+<h2 class="title title--h2 d-flex align-items-center justify-content-between">
+    <span><span class="box icon-box"><i class="font-icon feathericon-briefcase"></i></span>{{ 'resume.experiences.title'|trans }}</span>
+    {% if is_granted('ROLE_ADMIN') %}
+        <button type="button" class="btn js-open-experience-modal" data-url="{{ path('experience_new') }}">
+            <i class="feathericon-plus"></i> {{ 'global.add'|trans }}
+        </button>
+    {% endif %}
+</h2>
 <div class="timeline">
     {% for experience in experiences %}
         <!-- Item -->
         <article class="timeline__item">
             <h4 class="title title--h4 timeline__title">{{ experience.company }} - {{ experience.title }}</h4>
-            <span class="timeline__period">{{ experience.startDate|date('F Y') }} — {{ experience.endDate|date('F Y') }}</span>
-            <p class="timeline__description">{{ experience.description }}</p>
+            <span class="timeline__period">
+                 {{ experience.startDate ? experience.startDate|format_date(pattern='MMMM y')|capitalize : '' }}
+                —  {{ experience.endDate ? experience.endDate|format_date(pattern='MMMM y')|capitalize : 'global.in_progress'|trans }}
+            </span>
+            <p class="timeline__description">{{ experience.description|raw }}</p>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="mt-2 d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-secondary js-open-experience-modal" data-url="{{ path('experience_edit', {id: experience.id}) }}">
+                        <i class="feathericon-edit"></i> {{ 'global.edit'|trans }}
+                    </button>
+                    <form method="post" action="{{ path('experience_delete', {id: experience.id}) }}" onsubmit="return confirm('{{ 'global.delete_confirm'|trans }}');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_experience_' ~ experience.id) }}">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="feathericon-delete"></i> {{ 'global.delete'|trans }}
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
         </article>
     {% endfor %}
 </div>
+
+
+{# Modal Bootstrap réutilisable #}
+<div class="modal fade" id="experienceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content box box-inner" id="experienceModalContent">
+            {# Le contenu du formulaire sera chargé ici via fetch() #}
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const modalEl = document.getElementById('experienceModal');
+        const modalContentEl = document.getElementById('experienceModalContent');
+
+        function getModalInstance(el) {
+            if (window.bootstrap && bootstrap.Modal) {
+                // Bootstrap >= 5.2
+                if (typeof bootstrap.Modal.getOrCreateInstance === 'function') {
+                    return bootstrap.Modal.getOrCreateInstance(el);
+                }
+                // Bootstrap 5.0/5.1
+                if (typeof bootstrap.Modal.getInstance === 'function') {
+                    return bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
+                }
+                // Dernier recours
+                return new bootstrap.Modal(el);
+            }
+            return null;
+        }
+
+        function bootstrapModalShow() {
+            const modal = getModalInstance(modalEl);
+            if (modal) {
+                modal.show();
+            } else {
+                // Fallback très simple si Bootstrap JS n'est pas chargé
+                modalEl.style.display = 'block';
+                modalEl.classList.add('show');
+            }
+        }
+
+        function bootstrapModalHide() {
+            const modal = getModalInstance(modalEl);
+            if (modal) {
+                modal.hide();
+            } else {
+                modalEl.style.display = 'none';
+                modalEl.classList.remove('show');
+            }
+        }
+
+        function attachFormHandler() {
+            const form = modalContentEl.querySelector('form');
+            if (!form) return;
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const action = form.getAttribute('action');
+                if (!action) {
+                    console.error('Form action manquante');
+                    return;
+                }
+                const method = (form.getAttribute('method') || 'POST').toUpperCase();
+                // S'assure que le contenu TinyMCE est synchronisé dans le textarea
+                if (window.tinymce && typeof tinymce.triggerSave === 'function') {
+                    tinymce.triggerSave();
+                }
+                const formData = new FormData(form);
+
+                try {
+                    const res = await fetch(action, {
+                        method: method,
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                        body: formData
+                    });
+
+                    const contentType = res.headers.get('content-type') || '';
+
+                    if (contentType.includes('application/json')) {
+                        const data = await res.json();
+                        if (data.reload) {
+                            window.location.reload();
+                            return;
+                        }
+                    }
+
+                    // 200/422 avec HTML (form re-rendu + erreurs)
+                    const html = await res.text();
+                    modalContentEl.innerHTML = html;
+                    if (window.initTinyMCE) { window.initTinyMCE(); }
+                    attachFormHandler();
+                } catch (err) {
+                    console.error('Submission error', err);
+                }
+            }, { once: true });
+        }
+
+        async function openExperienceModal(url) {
+            try {
+                const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                const html = await res.text();
+                modalContentEl.innerHTML = html;
+                if (window.initTinyMCE) { window.initTinyMCE(); }
+                attachFormHandler();
+                bootstrapModalShow();
+            } catch (err) {
+                console.error('Modal load error', err);
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const trigger = e.target.closest('.js-open-experience-modal');
+            if (!trigger) return;
+            e.preventDefault();
+            const url = trigger.getAttribute('data-url');
+            if (url) openExperienceModal(url);
+        });
+
+        // Fermer la modale si on clique sur un bouton [data-bs-dismiss="modal"] en fallback
+        modalEl.addEventListener('click', function(e) {
+            const dismiss = e.target.closest('[data-bs-dismiss="modal"]');
+            if (dismiss && !(window.bootstrap && bootstrap.Modal)) {
+                bootstrapModalHide();
+            }
+        });
+    })();
+</script>

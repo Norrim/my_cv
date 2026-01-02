@@ -1,46 +1,77 @@
 global:
-  cancel: "Annuler"
-  save: "Enregistrer"
-
-nav:
-  about: "À propos"
-  resume: "CV"
-  portfolio: "Portfolio"
-  blog: "Blog"
-  contact: "Contact"
-
-resume:
-  educations:
-    title: "Formations"
+    cancel: "Annuler"
+    save: "Enregistrer"
     add: "Ajouter"
     edit: "Éditer"
     delete: "Supprimer"
     delete_confirm: "Confirmer la suppression ?"
-  education:
-    modal:
-      title: "Formation"
-      new:
-        title: "Ajouter une formation"
-      edit:
-        title: "Modifier la formation"
-    flash:
-      created: "Formation créée avec succès."
-      updated: "Formation mise à jour."
-      deleted: "Formation supprimée."
-      csrf_invalid: "Jeton CSRF invalide."
-    form:
-      title:
-        label: "Intitulé"
-      school:
-        label: "Établissement"
-      start_date:
-        label: "Date de début"
-      end_date:
-        label: "Date de fin"
-      description:
-        label: "Description"
-      position:
-        label: "Position"
+    in_progress: "En cours"
+
+nav:
+    about: "À propos"
+    resume: "CV"
+    portfolio: "Portfolio"
+    blog: "Blog"
+    contact: "Contact"
+
+resume:
+    educations:
+        title: "Formations"
+
+    education:
+        modal:
+            title: "Formation"
+            new:
+                title: "Ajouter une formation"
+            edit:
+                title: "Modifier la formation"
+        flash:
+            created: "Formation créée avec succès."
+            updated: "Formation mise à jour."
+            deleted: "Formation supprimée."
+            csrf_invalid: "Jeton CSRF invalide."
+        form:
+            title:
+                label: "Intitulé"
+            school:
+                label: "Établissement"
+            start_date:
+                label: "Date de début"
+            end_date:
+                label: "Date de fin"
+            description:
+                label: "Description"
+            position:
+                label: "Position"
+
+    experiences:
+        title: "Expériences"
+
+    experience:
+        modal:
+            title: "Expérience"
+            new:
+                title: "Ajouter une expérience"
+            edit:
+                title: "Modifier la expérience"
+        flash:
+            created: "Expérience créée avec succès."
+            updated: "Expérience mise à jour."
+            deleted: "Expérience supprimée."
+            csrf_invalid: "Jeton CSRF invalide."
+        form:
+            title:
+                label: "Intitulé"
+            company:
+                label: "Entreprise"
+            start_date:
+                label: "Date de début"
+            end_date:
+                label: "Date de fin"
+            description:
+                label: "Description"
+            position:
+                label: "Position"
 
 contact:
-  send: "Envoyer le message"
+    send: "Envoyer le message"
