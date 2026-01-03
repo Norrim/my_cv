@@ -1,14 +1,20 @@
 <aside class="col-12 col-md-12 col-xl-3">
     <div class="sidebar box-outer sticky-column">
-        <!-- My photo -->
         <div class="sidebar__base-info">
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="text-xl-center">
+                    <button type="button" class="btn btn-sm btn-secondary js-open-crud-modal" data-url="{{ path('personal_info_edit') }}">
+                        <i class="feathericon-edit"></i> {{ 'global.edit'|trans }}
+                    </button>
+                </div>
+            {% endif %}
             <figure class="avatar-box">
-                <img src="{{ asset('assets/images/my-avatar.png') }}" alt="Remi Tiertant">
+                <img src="{{ asset('assets/images/my-avatar.png') }}" alt="{{ personalInfo.firstname }} {{ personalInfo.name }}">
             </figure>
 
             <div class="text-xl-center">
-                <h3 class="title title--h3 sidebar__name">Remi Tiertant</h3>
-                <div class="badge">Developpeur PHP Symfony</div>
+                <h3 class="title title--h3 sidebar__name">{{ personalInfo.firstname }} {{ personalInfo.name }}</h3>
+                <div class="badge">{{ personalInfo.title }}</div>
             </div>
 
             <button class="btn btn--small btn--icon-right sidebar__btn js-btn-toggle"><span>Show Contacts</span><i class="feathericon-chevron-down"></i></button>
@@ -22,7 +28,7 @@
                     <span class="box icon-box"><i class="font-icon icon-envelope"></i></span>
                     <div class="contacts-block__info">
                         <span class="overhead">Email</span>
-                        <a class="text-overflow" href="mailto:remi.tiertant@gmail.com" title="remi.tiertant@gmail.com">remi.tiertant@gmail.com</a>
+                        <a class="text-overflow" href="mailto:{{ personalInfo.email }}" title="{{ personalInfo.email }}">{{ personalInfo.email }}</a>
                     </div>
                 </li>
                 <!-- Phone -->
@@ -30,7 +36,7 @@
                     <span class="box icon-box"><i class="font-icon icon-phone"></i></span>
                     <div class="contacts-block__info">
                         <span class="overhead">Téléphone</span>
-                        <span class="text-overflow" title="06 28 49 61 49">06 28 49 61 49</span>
+                        <span class="text-overflow" title="{{ personalInfo.phoneNumber }}">{{ personalInfo.phoneNumber }}</span>
                     </div>
                 </li>
 
@@ -39,7 +45,7 @@
                     <span class="box icon-box"><i class="font-icon icon-location"></i></span>
                     <div class="contacts-block__info">
                         <span class="overhead">Localisation</span>
-                        <span class="text-overflow" title="Métropole de Lille">Métropole de Lille</span>
+                        <span class="text-overflow" title="{{ personalInfo.localisation }}">{{ personalInfo.localisation }}</span>
                     </div>
                 </li>
             </ul>

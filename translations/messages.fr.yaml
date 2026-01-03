@@ -97,3 +97,20 @@ social:
             label: "Classe css de l'icône"
         position:
             label: "Position"
+
+personal_info:
+    modal:
+        title: "Modifier les informations personnelles"
+    flash:
+        updated: "Informations personnelles mises à jour avec succès."
+    form:
+        firstname: "Prénom"
+        name: "Nom"
+        title: "Titre"
+        phone_number: "Numéro de téléphone"
+        localisation: "Localisation"
+        email: "Email"
+        about: "À propos de moi"
+
+about:
+    about_me: "A propos de moi"

@@ -1,0 +1,15 @@
+{% extends 'partials/_form_modal_base.html.twig' %}
+
+{% set form_id = 'personal-info-edit-form' %}
+
+{% block form_body %}
+    <div class="col-12">
+        {{ form_row(form.firstname) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.phoneNumber) }}
+        {{ form_row(form.localisation) }}
+        {{ form_row(form.about) }}
+    </div>
+{% endblock %}
