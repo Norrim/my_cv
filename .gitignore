@@ -37,3 +37,6 @@ phpstan.neon
 #prod
 docker-compose.prod.yml
 /traefik/
+
+#images
+/public/assets/images/clients/
