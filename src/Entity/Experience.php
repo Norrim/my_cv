@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ExperienceRepository::class)]
-final class Experience
+class Experience
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

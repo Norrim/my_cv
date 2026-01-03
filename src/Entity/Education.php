@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: EducationRepository::class)]
 #[Assert\Callback('validateDates')]
-final class Education
+class Education
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
