@@ -33,3 +33,7 @@ phpstan.neon
 
 #Junie
 .junie/guidelines.md
+
+#prod
+docker-compose.prod.yml
+/traefik/
