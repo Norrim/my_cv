@@ -76,6 +76,15 @@
 
                     const html = await res.text();
                     modalContentEl.innerHTML = html;
+
+                    // Execute scripts in the injected HTML
+                    modalContentEl.querySelectorAll('script').forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                        oldScript.parentNode.replaceChild(newScript, oldScript);
+                    });
+
                     if (window.initTinyMCE) { window.initTinyMCE(); }
                     attachFormHandler();
                 } catch (err) {
@@ -89,6 +98,15 @@
                 const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
                 const html = await res.text();
                 modalContentEl.innerHTML = html;
+
+                // Execute scripts in the injected HTML
+                modalContentEl.querySelectorAll('script').forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+
                 if (window.initTinyMCE) { window.initTinyMCE(); }
                 attachFormHandler();
                 bootstrapModalShow();

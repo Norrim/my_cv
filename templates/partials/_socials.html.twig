@@ -6,4 +6,9 @@
     {% else %}
         <a class="social__link" href="#"><i class="feathericon-link"></i></a>
     {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <button type="button" class="btn btn-sm btn-secondary js-open-crud-modal" data-url="{{ path('social_edit_all') }}">
+            <i class="feathericon-edit"></i> {{ 'global.edit'|trans }}
+        </button>
+    {% endif %}
 </div>

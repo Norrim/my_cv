@@ -81,3 +81,19 @@ resume:
 
 contact:
     send: "Envoyer le message"
+
+social:
+    modal:
+        title: "Modifier les réseaux sociaux"
+    flash:
+        updated: "Réseaux sociaux mis à jour avec succès."
+    form:
+        add: "Ajouter un réseau"
+        name:
+            label: "Nom"
+        url:
+            label: "URL"
+        icon_class:
+            label: "Classe css de l'icône"
+        position:
+            label: "Position"

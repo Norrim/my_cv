@@ -1,0 +1,35 @@
+<div class="social-entry mb-3 position-relative">
+    <div class="row g-3 mt-3">
+        <div class="mb-3">
+            <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 js-remove-social" title="{{ 'global.delete'|trans }}">
+                <i class="feathericon-trash-2"></i>
+            </button>
+        </div>
+
+        <div class="form-group col-12 col-md-6">
+            {{ form_row(socialForm.name, {
+                'label': ('social.form.name.label')|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-6">
+            {{ form_row(socialForm.iconClass, {
+                'label': ('social.form.icon_class.label')|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-9">
+            {{ form_row(socialForm.url, {
+                'label': ('social.form.url.label')|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-3">
+            {{ form_row(socialForm.position, {
+                'label': ('social.form.position.label')|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+    </div>
+    <hr class="mt-4">
+</div>
