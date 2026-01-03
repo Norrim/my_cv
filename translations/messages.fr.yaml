@@ -114,3 +114,17 @@ personal_info:
 
 about:
     about_me: "A propos de moi"
+
+client:
+    modal:
+        title: "Modifier les logos clients"
+    flash:
+        updated: "Logos clients mis à jour avec succès."
+    form:
+        add: "Ajouter un client"
+        name:
+            label: "Nom"
+        position:
+            label: "Position"
+        logo:
+            label: "Logo"

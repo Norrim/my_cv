@@ -97,35 +97,23 @@
     </div>
 
     <!-- Clients -->
-    <h2 class="title title--h2 mt-4">Clients</h2>
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+        <h2 class="title title--h2 mb-0">Clients</h2>
+        {% if is_granted('ROLE_ADMIN') %}
+            <button type="button" class="btn btn-sm btn-secondary js-open-crud-modal" data-url="{{ path('client_edit_all') }}">
+                <i class="feathericon-edit"></i> {{ 'global.edit'|trans }}
+            </button>
+        {% endif %}
+    </div>
     <div class="swiper-container js-carousel-clients">
         <div class="swiper-wrapper">
-            <!-- Item client -->
-            <figure class="swiper-slide">
-                <a href="#"><img class="logo-client" src="{{ asset('assets/images/clients/logo-1-color.png') }}" alt="Logo" /></a>
-            </figure>
-
-            <!-- Item client -->
-            <figure class="swiper-slide">
-                <a href="#"><img class="logo-client" src="{{ asset('assets/images/clients/logo-2-color.png') }}" alt="Logo" /></a>
-            </figure>
-
-            <!-- Item client -->
-            <figure class="swiper-slide">
-                <a href="#"><img class="logo-client" src="{{ asset('assets/images/clients/logo-3-color.png') }}" alt="Logo" /></a>
-            </figure>
-
-            <!-- Item client -->
-            <figure class="swiper-slide">
-                <a href="#"><img class="logo-client" src="{{ asset('assets/images/clients/logo-4-color.png') }}" alt="Logo" /></a>
-            </figure>
-
-            <!-- Item client -->
-            <figure class="swiper-slide">
-                <a href="#"><img class="logo-client" src="{{ asset('assets/images/clients/logo-5-color.png') }}" alt="Logo" /></a>
-            </figure>
+            {% for client in clients %}
+                <!-- Item client -->
+                <figure class="swiper-slide">
+                    <a href="#"><img class="logo-client" src="{{ asset(client.url) }}" alt="{{ client.name }}" /></a>
+                </figure>
+            {% endfor %}
         </div>
-
         <div class="swiper-pagination"></div>
-    </div><!-- /swiper-container -->
+    </div>
 </div>

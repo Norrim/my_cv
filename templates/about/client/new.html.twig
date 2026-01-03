@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Client{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/styles/vendors/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assets/styles/style.css') }}"/>
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #1e1e1f;
+            border-radius: 20px;
+            border: 1px solid #383838;
+            color: white;
+        }
+        .form-control {
+            background: #121212;
+            border: 1px solid #383838;
+            color: white;
+        }
+        .form-control:focus {
+            background: #121212;
+            color: white;
+            border-color: #ffdb70;
+            box-shadow: none;
+        }
+        .btn-submit {
+            background: linear-gradient(to right, #ffdb70, #ffca33);
+            color: #121212;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="form-container">
+            <h2 class="title title--h2">Ajouter un nouveau client</h2>
+
+            {{ form_start(form) }}
+                <div class="mb-3">
+                    {{ form_label(form.name, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.name) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.position, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.position, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.position) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.logo, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.logo, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.logo) }}
+                </div>
+
+                <button type="submit" class="btn btn-submit">Enregistrer</button>
+                <a href="{{ path('app_home') }}" class="btn btn-secondary mt-3">Retour</a>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

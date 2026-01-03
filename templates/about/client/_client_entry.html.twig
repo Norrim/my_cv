@@ -1,0 +1,34 @@
+<div class="client-entry mb-3 position-relative">
+    <div class="row g-3 mt-3">
+        <div class="mb-3">
+            <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 js-remove-client" title="{{ 'global.delete'|trans }}">
+                <i class="feathericon-trash-2"></i>
+            </button>
+        </div>
+
+        <div class="form-group col-12 col-md-6">
+            {{ form_row(clientForm.name, {
+                'label': ('client.form.name.label')|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-3">
+            {{ form_row(clientForm.position, {
+                'label': ('client.form.position.label')|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-3">
+             {% if clientForm.vars.data and clientForm.vars.data.url %}
+                <div class="mb-2">
+                    <img src="{{ asset(clientForm.vars.data.url) }}" alt="Current logo" style="max-height: 50px; max-width: 100%;">
+                </div>
+            {% endif %}
+            {{ form_row(clientForm.logo, {
+                'label': ('client.form.logo.label')|trans,
+                'attr': {'class': 'form-control'}
+            }) }}
+        </div>
+    </div>
+    <hr class="mt-4">
+</div>
