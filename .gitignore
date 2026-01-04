@@ -40,3 +40,4 @@ docker-compose.prod.yml
 
 #images
 /public/assets/images/clients/
+/public/assets/images/recommendations/

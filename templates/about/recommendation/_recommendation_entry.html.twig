@@ -1,0 +1,64 @@
+<div class="recommendation-entry mb-3 position-relative">
+    <div class="row g-3 mt-3">
+        <div class="mb-3">
+            <button type="button" class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 js-remove-recommendation" title="{{ 'global.delete'|trans }}">
+                <i class="feathericon-trash-2"></i>
+            </button>
+        </div>
+
+        <div class="form-group col-12 col-md-4">
+            {{ form_row(recommendationForm.firstname, {
+                'label': 'recommendation.form.firstname.label'|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-4">
+            {{ form_row(recommendationForm.lastname, {
+                'label': 'recommendation.form.lastname.label'|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-4">
+            {{ form_row(recommendationForm.recommandedAt, {
+                'label': 'recommendation.form.recommanded_at.label'|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-6">
+            {{ form_row(recommendationForm.currentRole, {
+                'label': 'recommendation.form.current_role.label'|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-6">
+            {{ form_row(recommendationForm.roleAtThatTime, {
+                'label': 'recommendation.form.role_at_that_time.label'|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12">
+            {{ form_row(recommendationForm.content, {
+                'label': 'recommendation.form.content.label'|trans,
+                'attr': {'class': 'input form-control', 'rows': 3}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-6">
+            {{ form_row(recommendationForm.position, {
+                'label': 'recommendation.form.position.label'|trans,
+                'attr': {'class': 'input form-control'}
+            }) }}
+        </div>
+        <div class="form-group col-12 col-md-6">
+             {% if recommendationForm.vars.data and recommendationForm.vars.data.imageUrl %}
+                <div class="mb-2">
+                    <img src="{{ asset(recommendationForm.vars.data.imageUrl) }}" alt="Current image" style="max-height: 50px; max-width: 100%;">
+                </div>
+            {% endif %}
+            {{ form_row(recommendationForm.image, {
+                'label': 'recommendation.form.image.label'|trans,
+                'attr': {'class': 'form-control'}
+            }) }}
+        </div>
+    </div>
+    <hr class="mt-4">
+</div>

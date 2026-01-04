@@ -49,47 +49,33 @@
         </div>
     </div>
 
-    <!-- Testimonials -->
-    <div class="testimonials">
-        <h2 class="title title--h2 mt-3">Testimonials</h2>
+    <!-- Recommendations -->
+    <div class="recommendations">
+        <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
+            <h2 class="title title--h2 mb-0">Recommandations</h2>
+            {% if is_granted('ROLE_ADMIN') %}
+                <button type="button" class="btn btn-sm btn-secondary js-open-crud-modal" data-url="{{ path('recommendation_edit_all') }}">
+                    <i class="feathericon-edit"></i> {{ 'global.edit'|trans }}
+                </button>
+            {% endif %}
+        </div>
 
         <div class="swiper-container js-carousel-review">
             <div class="swiper-wrapper">
-                <!-- Item review -->
-                <div class="swiper-slide review-item box box-inner js-open-review" data-mfp-src="#review-1" data-effect="mfp-zoom-out">
-                    <figure class="box box-avatar">
-                        <img src="{{ asset('assets/images/avatar-1.png') }}" alt="Daniel Lewis">
-                    </figure>
-                    <h4 class="title title--h3">Daniel Lewis</h4>
-                    <p class="review-item__caption">Ricardo was hired to create a corporate identity. We were very pleased with the work done...</p>
-                </div>
-
-                <!-- Item review -->
-                <div class="swiper-slide review-item box box-inner js-open-review" data-mfp-src="#review-2" data-effect="mfp-zoom-out">
-                    <figure class="box box-avatar">
-                        <img src="{{ asset('assets/images/avatar-2.png') }}" alt="Daniel Lewis">
-                    </figure>
-                    <h4 class="title title--h3">Jessica Miller</h4>
-                    <p class="review-item__caption">Thanks to the skill of Ricardo, we have a design that we can be proud of. We are impressed with...</p>
-                </div>
-
-                <!-- Item review -->
-                <div class="swiper-slide review-item box box-inner js-open-review" data-mfp-src="#review-3" data-effect="mfp-zoom-out">
-                    <figure class="box box-avatar">
-                        <img src="{{ asset('assets/images/avatar-3.png') }}" alt="Daniel Lewis">
-                    </figure>
-                    <h4 class="title title--h3">Emily Evans</h4>
-                    <p class="review-item__caption">Ricardo did a miracle with my website. It looks exactly as I imagined it. Now I have a profession...</p>
-                </div>
-
-                <!-- Item review -->
-                <div class="swiper-slide review-item box box-inner js-open-review" data-mfp-src="#review-4" data-effect="mfp-zoom-out">
-                    <figure class="box box-avatar">
-                        <img src="{{ asset('assets/images/avatar-4.png') }}" alt="Daniel Lewis">
-                    </figure>
-                    <h4 class="title title--h3">Henry William</h4>
-                    <p class="review-item__caption">Thank you very much for your work on our project. It was a big help for us. Thanks to the...</p>
-                </div>
+                {% for recommendation in recommendations %}
+                    <!-- Item review -->
+                    <div class="swiper-slide review-item box box-inner js-open-review" data-mfp-src="#review-{{ recommendation.id }}" data-effect="mfp-zoom-out">
+                        <figure class="box box-avatar">
+                            {% if recommendation.imageUrl %}
+                                <img src="{{ asset(recommendation.imageUrl) }}" alt="{{ recommendation.fullName }}">
+                            {% else %}
+                                <img src="{{ asset('assets/images/avatar-1.png') }}" alt="{{ recommendation.fullName }}">
+                            {% endif %}
+                        </figure>
+                        <h4 class="title title--h3">{{ recommendation.fullName }} - {{ recommendation.currentRole }}</h4>
+                        <p class="review-item__caption">{{ recommendation.content|u.truncate(100, '...') }}</p>
+                    </div>
+                {% endfor %}
             </div>
 
             <div class="swiper-pagination"></div>
@@ -117,3 +103,33 @@
         <div class="swiper-pagination"></div>
     </div>
 </div>
+
+{% for recommendation in recommendations %}
+    <!-- Full review {{ recommendation.id }} -->
+    <div id="review-{{ recommendation.id }}" class="popup mfp-hide mfp-with-anim">
+        <div class="row">
+            <div class="col-12 col-sm-2 full-rewiew-con-avatar">
+                <figure class="box box-avatar">
+                    {% if recommendation.imageUrl %}
+                        <img src="{{ asset(recommendation.imageUrl) }}" alt="{{ recommendation.fullName }}">
+                    {% else %}
+                        <img src="{{ asset('assets/images/avatar-1.png') }}" alt="{{ recommendation.fullName }}">
+                    {% endif %}
+                </figure>
+                <div class="review-icon-quote"></div>
+            </div>
+            <div class="col-12 col-sm-10 full-rewiew-con-text">
+                <h2 class="title title--h2 mb-1">{{ recommendation.fullName }} - {{ recommendation.currentRole }}</h2>
+                {% if recommendation.recommandedAt %}
+                    <span class="review-date">{{ recommendation.recommandedAt|date('d F, Y') }}</span>
+                {% endif %}
+                {% if recommendation.roleAtThatTime %}
+                    <div class="review-role-past"><small>{{ recommendation.firstname }} {{ 'recommendation.at_that_time'|trans }}: {{ recommendation.roleAtThatTime }} de {{ personalInfo.firstname }}</small></div>
+                {% endif %}
+                <div class="mt-2">
+                    {{ recommendation.content|nl2br }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

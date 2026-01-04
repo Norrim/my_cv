@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
-use App\Service\FileUploader;
+use App\Service\ClientFileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -23,7 +23,7 @@ final class ClientController extends AbstractController
     public function __construct(
         private readonly ClientRepository $clientRepository,
         private readonly EntityManagerInterface $em,
-        private readonly FileUploader $fileUploader,
+        private readonly ClientFileUploader $fileUploader,
         private readonly TranslatorInterface $translator,
     ) {}
 
@@ -56,10 +56,7 @@ final class ClientController extends AbstractController
                 if (!in_array($existingClient, $submittedClients, true)) {
                     // Delete the physical file before removing from DB
                     if ($existingClient->getUrl()) {
-                        $filePath = $this->fileUploader->getTargetDirectory() . '/' . str_replace('assets/images/clients/', '', $existingClient->getUrl());
-                        if (file_exists($filePath)) {
-                            unlink($filePath);
-                        }
+                        $this->fileUploader->remove(basename($existingClient->getUrl()));
                     }
                     $this->em->remove($existingClient);
                 }
@@ -72,10 +69,7 @@ final class ClientController extends AbstractController
                 if ($logoFile) {
                     // Delete old file if exists
                     if ($client->getUrl()) {
-                        $oldFilePath = $this->fileUploader->getTargetDirectory() . '/' . str_replace('assets/images/clients/', '', $client->getUrl());
-                        if (file_exists($oldFilePath)) {
-                            unlink($oldFilePath);
-                        }
+                        $this->fileUploader->remove(basename($client->getUrl()));
                     }
 
                     $logoFileName = $this->fileUploader->upload($logoFile);

@@ -68,7 +68,7 @@ php:
 composer:
 	$(COMPOSER) install --no-interaction --prefer-dist
 
-cache-clear:
+cache:
 	$(CONSOLE) cache:clear
 
 # ==== Symfony / Doctrine ====

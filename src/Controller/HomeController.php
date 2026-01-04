@@ -8,6 +8,7 @@ use App\Repository\ClientRepository;
 use App\Repository\EducationRepository;
 use App\Repository\ExperienceRepository;
 use App\Repository\PersonalInfoRepository;
+use App\Repository\RecommendationRepository;
 use App\Repository\SkillRepository;
 use App\Repository\SocialRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,6 +24,7 @@ final class HomeController extends AbstractController
         private readonly SocialRepository $socialRepository,
         private readonly PersonalInfoRepository $personalInfoRepository,
         private readonly ClientRepository $clientRepository,
+        private readonly RecommendationRepository $recommendationRepository,
     ) {}
 
     #[Route(path: '/', name: 'app_home', methods: ['GET'])]
@@ -34,6 +36,7 @@ final class HomeController extends AbstractController
         $socials = $this->socialRepository->findBy([], ['id' => 'ASC']);
         $personalInfo = $this->personalInfoRepository->findOneBy([]);
         $clients = $this->clientRepository->findBy([], ['position' => 'ASC']);
+        $recommendations = $this->recommendationRepository->findBy([], ['position' => 'ASC']);
 
         return $this->render('pages/home.html.twig', [
             'educations' => $educations,
@@ -42,6 +45,7 @@ final class HomeController extends AbstractController
             'socials' => $socials,
             'personalInfo' => $personalInfo,
             'clients' => $clients,
+            'recommendations' => $recommendations,
         ]);
     }
 }

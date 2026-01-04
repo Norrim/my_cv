@@ -128,3 +128,28 @@ client:
             label: "Position"
         logo:
             label: "Logo"
+
+recommendation:
+    modal:
+        title: "Modifier les recommandations"
+    flash:
+        updated: "Recommandations mises à jour avec succès."
+    at_that_time: "était le/la"
+    form:
+        add: "Ajouter une recommandation"
+        firstname:
+            label: "Prénom"
+        lastname:
+            label: "Nom"
+        current_role:
+            label: "Rôle actuel"
+        role_at_that_time:
+            label: "Rôle à l'époque"
+        recommanded_at:
+            label: "Date de recommandation"
+        content:
+            label: "Contenu"
+        position:
+            label: "Position"
+        image:
+            label: "Photo"
