@@ -99,32 +99,4 @@ final class ClientController extends AbstractController
             'submit_label' => 'global.save',
         ], new Response(null, $status));
     }
-
-    #[Route('/new', name: 'app_client_new', methods: ['GET', 'POST'])]
-    public function new(
-        Request $request,
-    ): Response {
-        $client = new Client();
-        $form = $this->createForm(ClientType::class, $client);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $logoFile = $form->get('logo')->getData();
-            if ($logoFile) {
-                $logoFileName = $this->fileUploader->upload($logoFile);
-                $client->setUrl('assets/images/clients/' . $logoFileName);
-            }
-
-            $this->clientRepository->save($client, true);
-
-            $this->addFlash('success', 'Client ajouté avec succès !');
-
-            return $this->redirectToRoute('app_home');
-        }
-
-        return $this->render('about/client/new.html.twig', [
-            'client' => $client,
-            'form' => $form,
-        ]);
-    }
 }

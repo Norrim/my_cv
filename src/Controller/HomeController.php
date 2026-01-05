@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Repository\ClientRepository;
 use App\Repository\EducationRepository;
 use App\Repository\ExperienceRepository;
+use App\Repository\ExpertiseRepository;
 use App\Repository\PersonalInfoRepository;
 use App\Repository\RecommendationRepository;
 use App\Repository\SkillRepository;
@@ -25,6 +26,7 @@ final class HomeController extends AbstractController
         private readonly PersonalInfoRepository $personalInfoRepository,
         private readonly ClientRepository $clientRepository,
         private readonly RecommendationRepository $recommendationRepository,
+        private readonly ExpertiseRepository $expertiseRepository,
     ) {}
 
     #[Route(path: '/', name: 'app_home', methods: ['GET'])]
@@ -37,6 +39,7 @@ final class HomeController extends AbstractController
         $personalInfo = $this->personalInfoRepository->findOneBy([]);
         $clients = $this->clientRepository->findBy([], ['position' => 'ASC']);
         $recommendations = $this->recommendationRepository->findBy([], ['position' => 'ASC']);
+        $expertises = $this->expertiseRepository->findBy([], ['position' => 'ASC']);
 
         return $this->render('pages/home.html.twig', [
             'educations' => $educations,
@@ -46,6 +49,7 @@ final class HomeController extends AbstractController
             'personalInfo' => $personalInfo,
             'clients' => $clients,
             'recommendations' => $recommendations,
+            'expertises' => $expertises,
         ]);
     }
 }

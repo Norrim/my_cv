@@ -1,0 +1,22 @@
+<!-- What -->
+<div class="d-flex justify-content-between align-items-center mt-3 mb-2">
+    <h2 class="title title--h2 mb-0">What I'm Doing</h2>
+    {% if is_granted('ROLE_ADMIN') %}
+        <button type="button" class="btn btn-sm btn-secondary js-open-crud-modal" data-url="{{ path('expertise_edit_all') }}">
+            <i class="feathericon-edit"></i> {{ 'global.edit'|trans }}
+        </button>
+    {% endif %}
+</div>
+<div class="row">
+    {% for expertise in expertises %}
+        <!-- Case Item -->
+        <div class="col-12 col-lg-6">
+            <div class="case-item box box-inner">
+                <div>
+                    <h3 class="title title--h3">{{ expertise.title }}</h3>
+                    <p class="case-item__caption">{{ expertise.content }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

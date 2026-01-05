@@ -153,3 +153,17 @@ recommendation:
             label: "Position"
         image:
             label: "Photo"
+
+expertise:
+    modal:
+        title: "Modifier ce que je fais"
+    flash:
+        updated: "Expertises mises à jour avec succès."
+    form:
+        add: "Ajouter une expertise"
+        title:
+            label: "Titre"
+        content:
+            label: "Contenu"
+        position:
+            label: "Position"
