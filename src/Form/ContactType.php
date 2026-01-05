@@ -18,23 +18,26 @@ final class ContactType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'required' => true,
                 'attr' => [
                     'class' => 'input form-control',
                     'placeholder' => 'Full name',
-                    'autocomplete' => 'on',
+                    'autocomplete' => 'name',
                 ],
             ])
             ->add('email', EmailType::class, [
+                'required' => true,
                 'attr' => [
                     'class' => 'input form-control',
                     'placeholder' => 'Email address',
-                    'autocomplete' => 'on',
+                    'autocomplete' => 'email',
                 ],
             ])
             ->add('message', TextareaType::class, [
+                'required' => true,
                 'attr' => [
                     'class' => 'textarea form-control',
-                    'placeholder' => 'Your Message',
+                    'placeholder' => 'Your Message (min 10 characters)',
                     'rows' => '4',
                 ],
             ]);
@@ -46,6 +49,7 @@ final class ContactType extends AbstractType
             'data_class' => ContactRequest::class,
         ]);
     }
+
     public function getBlockPrefix(): string
     {
         return 'contact';

@@ -17,6 +17,6 @@ final class ContactRequest
     public ?string $email = null;
 
     #[Assert\NotBlank]
-    #[Assert\Length(min: 10)]
+    #[Assert\Length(min: 10, minMessage: 'Merci de saisir au moins {{ limit }} caractères.')]
     public ?string $message = null;
 }
