@@ -11,8 +11,8 @@ $(document).ready(function() {
     /*-----------------------------------------------------------------
       Detect device mobile
     -------------------------------------------------------------------*/
-	
-    var isMobile = false; 
+
+    var isMobile = false;
     if( /Android|webOS|iPhone|iPod|iPad|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         $('html').addClass('touch');
         isMobile = true;
@@ -27,16 +27,16 @@ $(document).ready(function() {
       Show/hide additional info
     -------------------------------------------------------------------*/
 
-    $('.js-btn-toggle').on('click', function(e) {     
+    $('.js-btn-toggle').on('click', function(e) {
         $('.js-show').toggle('slow');
         e.preventDefault();
     });
-    
+
 
     /*-----------------------------------------------------------------
       Carousel
-    -------------------------------------------------------------------*/	
-    
+    -------------------------------------------------------------------*/
+
 	  // Testimonials
 	  $('.js-carousel-review').each(function() {
 		    var testimonialsCarousel = new Swiper('.js-carousel-review', {
@@ -63,7 +63,7 @@ $(document).ready(function() {
             }
 		    });
 	  });
-	
+
 	  // Clients
 	  $('.js-carousel-clients').each(function() {
 		    var clientCarousel = new Swiper('.js-carousel-clients', {
@@ -80,11 +80,11 @@ $(document).ready(function() {
                 320: {
                     slidesPerView: 2,
                     spaceBetween: 0
-                },				
+                },
                 580: {
                     slidesPerView: 3,
                     spaceBetween: 30
-                },				
+                },
                 991: {
                     slidesPerView: 3,
                     spaceBetween: 30
@@ -92,7 +92,7 @@ $(document).ready(function() {
             }
 		    });
 	  });
-	
+
 	  // Project carousel
 	  $('.js-carousel-project').each(function() {
 		    var projectCarousel = new Swiper('.js-carousel-project', {
@@ -197,7 +197,7 @@ $(document).ready(function() {
     /*-----------------------------------------------------------------
       Progress bar
     -------------------------------------------------------------------*/
-    
+
 	  function progressBar() {
 	      $('.progress').each(function() {
 		        var ctrl = new ScrollMagic.Controller();
@@ -215,33 +215,33 @@ $(document).ready(function() {
 		        });
         });
     }
-	  
+
     progressBar(); //Init
-	
+
     /*-----------------------------------------------------------------
       Scroll indicator
     -------------------------------------------------------------------*/
-  
+
     function scrollIndicator() {
         $(window).on('scroll', function() {
-            var wintop = $(window).scrollTop(), docheight = 
+            var wintop = $(window).scrollTop(), docheight =
             $(document).height(), winheight = $(window).height();
  	          var scrolled = (wintop/(docheight-winheight))*100;
   	        $('.scroll-line').css('width', (scrolled + '%'));
         });
     }
-	
+
 	  scrollIndicator(); //Init
-	
-	
+
+
     /*-----------------------------------------------------------------
       ScrollTo
     -------------------------------------------------------------------*/
-	
+
     function scrollToTop() {
         var $backToTop = $('.back-to-top'),
             $showBackTotop = $(window).height();
-			
+
         $backToTop.hide();
 
         $(window).scroll( function() {
@@ -252,29 +252,29 @@ $(document).ready(function() {
                 $backToTop.fadeOut('fast');
             }
         });
-        
+
 		    $backToTop.on('click', function (e) {
             e.preventDefault();
             $(' body, html ').animate( {scrollTop : 0}, 'fast' );
         });
     }
-	
+
 	  scrollToTop(); //Init
 
 
     /*-----------------------------------------------------------------
       Style background image
-    -------------------------------------------------------------------*/	
-  
+    -------------------------------------------------------------------*/
+
     $('.js-image').each(function(){
         var dataImage = $(this).attr('data-image');
         $(this).css('background-image', 'url(' + dataImage + ')');
     });
-    
-	
+
+
     /*-----------------------------------------------------------------
       Autoresize textarea
-    -------------------------------------------------------------------*/	
+    -------------------------------------------------------------------*/
 
     $('textarea').each(function(){
         autosize(this);
@@ -283,8 +283,8 @@ $(document).ready(function() {
 
     /*-----------------------------------------------------------------
       Switch categories & Filter mobile
-    -------------------------------------------------------------------*/	
-  
+    -------------------------------------------------------------------*/
+
     $('.select').on('click','.placeholder',function(){
         var parent = $(this).closest('.select');
         if ( ! parent.hasClass('is-open')){
@@ -297,22 +297,22 @@ $(document).ready(function() {
         var parent = $(this).closest('.select');
         parent.removeClass('is-open').find('.placeholder').text( $(this).text() );
         parent.find('input[type=hidden]').attr('value', $(this).attr('data-value') );
-	
+
 	      $('.filter__item').removeClass('active');
 	      $(this).addClass('active');
 	      var selector = $(this).attr('data-filter');
-		
+
 	      $('.js-filter-container').isotope({
 	          filter: selector
 	      });
-	      return false;	
+	      return false;
     });
 
 
     /*-----------------------------------------------------------------
       Masonry
-    -------------------------------------------------------------------*/	
-	
+    -------------------------------------------------------------------*/
+
     // Portfolio
     var $portfolioMasonry = $('.js-masonry').isotope({
         itemSelector: '.gallery-grid__item',
@@ -330,14 +330,14 @@ $(document).ready(function() {
         },
         fitRows: {
             gutter: '.gutter-sizer'
-        },	
+        },
         masonry: {
 	          columnWidth: '.gallery-grid__item',
             gutter: '.gutter-sizer',
             isAnimated: true
         }
     });
-  
+
     $portfolioMasonry.imagesLoaded().progress( function() {
         $portfolioMasonry.isotope ({
 	          columnWidth: '.gallery-grid__item',
@@ -350,19 +350,19 @@ $(document).ready(function() {
             }
 	      });
     });
- 
-  
+
+
     /*-----------------------------------------------------------------
 	  Tabs
-    -------------------------------------------------------------------*/	
-    
+    -------------------------------------------------------------------*/
+
     // on load of the page: switch to the currently selected tab
     var hash = document.location.hash; //var hash = window.location.hash;
     var prefix = "tab_";
     if (hash) {
         $('.nav a[href="'+hash.replace(prefix,"")+'"]').tab('show');
-    } 
-    // Change hash for page-reload 
+    }
+    // Change hash for page-reload
     $('ul.nav > li > a').on('shown.bs.tab', function (e) {
         window.location.hash = e.target.hash.replace("#", "#" + prefix);
     });
@@ -382,7 +382,7 @@ $(document).ready(function() {
 
     /*-----------------------------------------------------------------
       niceScroll
-    -------------------------------------------------------------------*/		
+    -------------------------------------------------------------------*/
 
     $('textarea').niceScroll({
 		    horizrailenabled: false,
@@ -396,7 +396,7 @@ $(document).ready(function() {
     /*-----------------------------------------------------------------
       emoji add in textarea
     -------------------------------------------------------------------*/
-	
+
     $(function() {
         $('.emoji-wrap img').on('click', function(){
             var emoji = $(this).attr('title');
@@ -408,7 +408,7 @@ $(document).ready(function() {
     /*-----------------------------------------------------------------
 	  mediumZoom
     -------------------------------------------------------------------*/
-  
+
     mediumZoom('[data-zoom]', {
         margin: 30
     });
@@ -435,71 +435,14 @@ $(document).ready(function() {
 
     lazySizes.init();
 
-	
+
     /*-----------------------------------------------------------------
       Polyfill object-fit
-    -------------------------------------------------------------------*/	
-	
-    var $someImages = $('img.cover');
-    objectFitImages($someImages);
-	
-
-    /*-----------------------------------------------------------------
-      Contacts form
     -------------------------------------------------------------------*/
 
-    $("#contact-form").validator().on("submit", function (event) {
-        if (event.isDefaultPrevented()) {
-            formError();
-            submitMSG(false, "Please fill in the form...");
-        } else {
-            event.preventDefault();
-            submitForm();
-        }
-    });
+    var $someImages = $('img.cover');
+    objectFitImages($someImages);
 
-    function submitForm(){
-        var name = $("#nameContact").val(),
-            email = $("#emailContact").val(),
-            message = $("#messageContact").val();
-			
-        var url = "assets/php/form-contact.php";
-		
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: "name=" + name + "&email=" + email + "&message=" + message,
-            success : function(text){
-                if (text == "success"){
-                    formSuccess();
-                } else {
-                    formError();
-                    submitMSG(false,text);
-                }
-            }
-        });
-    }
-
-    function formSuccess(){
-        $("#contact-form")[0].reset();
-        submitMSG(true, "Thanks! Your message has been sent.");
-    }
-  
-    function formError(){
-        $("#contactForm").removeClass().addClass('shake animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
-            $(this).removeClass();
-        });
-    }  
-  
-    function submitMSG(valid, msg){
-		var msgClasses;
-        if(valid){
-            msgClasses = "validation-success";
-        } else {
-           msgClasses = "validation-danger";
-        }
-        $("#validator-contact").removeClass().addClass(msgClasses).text(msg);
-    }
 
 
     /*-----------------------------------------------------------------
@@ -517,64 +460,64 @@ $(document).ready(function() {
               linkEl,
               size,
               item;
-      
+
           for (var i = 0; i < numNodes; i++) {
             figureEl = thumbElements[i]; // <figure> element
-      
+
             // include only element nodes
             if (figureEl.nodeType !== 1) {
               continue;
             }
-      
+
             linkEl = figureEl.children[0]; // <a> element
-      
+
             size = linkEl.getAttribute("data-size").split("x");
-      
+
             // create slide object
             item = {
               src: linkEl.getAttribute("href"),
               w: parseInt(size[0], 10),
               h: parseInt(size[1], 10)
             };
-      
+
             if (figureEl.children.length > 1) {
               // <figcaption> content
               item.title = figureEl.children[1].innerHTML;
             }
-      
+
             if (linkEl.children.length > 0) {
               // <img> thumbnail element, retrieving thumbnail url
               item.msrc = linkEl.children[0].getAttribute("src");
             }
-      
+
             item.el = figureEl; // save link to element for getThumbBoundsFn
             items.push(item);
           }
-      
+
           return items;
         };
-      
+
         // find nearest parent element
         var closest = function closest(el, fn) {
           return el && (fn(el) ? el : closest(el.parentNode, fn));
         };
-      
+
         // triggers when user clicks on thumbnail
         var onThumbnailsClick = function(e) {
           e = e || window.event;
           e.preventDefault ? e.preventDefault() : (e.returnValue = false);
-      
+
           var eTarget = e.target || e.srcElement;
-      
+
           // find root element of slide
           var clickedListItem = closest(eTarget, function(el) {
             return el.tagName && el.tagName.toUpperCase() === "FIGURE";
           });
-      
+
           if (!clickedListItem) {
             return;
           }
-      
+
           // find index of clicked item by looping through all child nodes
           // alternatively, you may define index via data- attribute
           var clickedGallery = clickedListItem.parentNode,
@@ -582,35 +525,35 @@ $(document).ready(function() {
               numChildNodes = childNodes.length,
               nodeIndex = 0,
               index;
-      
+
           for (var i = 0; i < numChildNodes; i++) {
             if (childNodes[i].nodeType !== 1) {
               continue;
             }
-      
+
             if (childNodes[i] === clickedListItem) {
               index = nodeIndex;
               break;
             }
             nodeIndex++;
           }
-      
+
           if (index >= 0) {
             // open PhotoSwipe if valid index found
             openPhotoSwipe(index, clickedGallery);
           }
           return false;
         };
-      
+
         // parse picture index and gallery index from URL (#&pid=1&gid=2)
         var photoswipeParseHash = function() {
           var hash = window.location.hash.substring(1),
               params = {};
-      
+
           if (hash.length < 5) {
             return params;
           }
-      
+
           var vars = hash.split("&");
           for (var i = 0; i < vars.length; i++) {
             if (!vars[i]) {
@@ -622,14 +565,14 @@ $(document).ready(function() {
             }
             params[pair[0]] = pair[1];
           }
-      
+
           if (params.gid) {
             params.gid = parseInt(params.gid, 10);
           }
-      
+
           return params;
         };
-      
+
         var openPhotoSwipe = function(
         index,
          galleryElement,
@@ -640,7 +583,7 @@ $(document).ready(function() {
               gallery,
               options,
               items;
-      
+
           items = parseThumbnailElements(galleryElement);
           options = {
             // Buttons/elements
@@ -660,11 +603,11 @@ $(document).ready(function() {
                   pageYScroll =
                   window.pageYOffset || document.documentElement.scrollTop,
                   rect = thumbnail.getBoundingClientRect();
-      
+
               return { x: rect.left, y: rect.top + pageYScroll, w: rect.width };
             }
           };
-      
+
           // PhotoSwipe opened from URL
           if (fromURL) {
             if (options.galleryPIDs) {
@@ -681,20 +624,20 @@ $(document).ready(function() {
           } else {
             options.index = parseInt(index, 10);
           }
-      
+
           // exit if index not found
           if (isNaN(options.index)) {
             return;
           }
-      
+
           if (disableAnimation) {
             options.showAnimationDuration = 0;
           }
-      
+
           // Pass data to PhotoSwipe and initialize it
           gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
           gallery.init();
-      
+
           gallery.listen("unbindEvents", function() {
             // The index of the current photoswipe slide
             var getCurrentIndex = gallery.getCurrentIndex();
@@ -710,22 +653,22 @@ $(document).ready(function() {
             }
           });*/
         };
-      
+
         // loop through all gallery elements and bind events
         var galleryElements = document.querySelectorAll(gallerySelector);
-      
+
         for (var i = 0, l = galleryElements.length; i < l; i++) {
           galleryElements[i].setAttribute("data-pswp-uid", i + 1);
           galleryElements[i].onclick = onThumbnailsClick;
         }
-      
+
         // Parse URL and open gallery if it contains #&pid=3&gid=1
         var hashData = photoswipeParseHash();
         if (hashData.pid && hashData.gid) {
           openPhotoSwipe(hashData.pid, galleryElements[hashData.gid - 1], true, true);
         }
       };
-      
+
       // execute above function
       initPhotoSwipeFromDOM(".project-gallery");
 });
