@@ -53,8 +53,8 @@ final class ContactControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         $form = $crawler->filter('button[type="submit"]')->form([
-            'contact[name]' => '',
-            'contact[email]' => 'invalid-email',
+            'contact[name]' => 'John Doe',
+            'contact[email]' => 'john@example.com',
             'contact[message]' => 'short'
         ]);
 
@@ -62,6 +62,7 @@ final class ContactControllerTest extends WebTestCase
 
         self::assertResponseRedirects('/#contact');
         $client->followRedirect();
-        self::assertSelectorTextContains('.alert-danger', 'Please check the form for errors.');
+        self::assertSelectorExists('.alert-danger');
+        self::assertSelectorTextContains('.alert-danger', 'Merci de saisir au moins 10 caractères.');
     }
 }

@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -38,10 +39,10 @@ final class ContactController extends AbstractController
         }
 
         $email = (new Email())
-            ->from($fromEmail)
+            ->from(new Address($fromEmail))
             ->to($contactEmail)
-            ->replyTo((string) $contactRequest->email)
-            ->subject(sprintf('New message from %s', (string) $contactRequest->name))
+            ->replyTo(new Address((string) $contactRequest->email, (string) $contactRequest->name))
+            ->subject(sprintf('[Site] Message de %s', (string) $contactRequest->name))
             ->text((string) $contactRequest->message);
 
         $mailer->send($email);
