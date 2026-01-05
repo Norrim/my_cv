@@ -12,6 +12,7 @@ use App\Repository\PersonalInfoRepository;
 use App\Repository\RecommendationRepository;
 use App\Repository\SkillRepository;
 use App\Repository\SocialRepository;
+use App\Form\ContactType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -41,6 +42,8 @@ final class HomeController extends AbstractController
         $recommendations = $this->recommendationRepository->findBy([], ['position' => 'ASC']);
         $expertises = $this->expertiseRepository->findBy([], ['position' => 'ASC']);
 
+        $form = $this->createForm(ContactType::class);
+
         return $this->render('pages/home.html.twig', [
             'educations' => $educations,
             'experiences' => $experiences,
@@ -50,6 +53,7 @@ final class HomeController extends AbstractController
             'clients' => $clients,
             'recommendations' => $recommendations,
             'expertises' => $expertises,
+            'contactForm' => $form->createView(),
         ]);
     }
 }
