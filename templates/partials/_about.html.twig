@@ -65,14 +65,14 @@
                 {% for recommendation in recommendations %}
                     <!-- Item review -->
                     <div class="swiper-slide review-item box box-inner js-open-review" data-mfp-src="#review-{{ recommendation.id }}" data-effect="mfp-zoom-out">
-                        <figure class="box box-avatar">
+                        <figure class="box box-avatar overflow-hidden">
                             {% if recommendation.imageUrl %}
                                 <img src="{{ asset(recommendation.imageUrl) }}" alt="{{ recommendation.fullName }}">
                             {% else %}
                                 <img src="{{ asset('assets/images/avatar-1.png') }}" alt="{{ recommendation.fullName }}">
                             {% endif %}
                         </figure>
-                        <h4 class="title title--h3">{{ recommendation.fullName }} - {{ recommendation.currentRole }}</h4>
+                        <h4 class="title title--h3">{{ recommendation.fullName }}</h4>
                         <p class="review-item__caption">{{ recommendation.content|u.truncate(100, '...') }}</p>
                     </div>
                 {% endfor %}
@@ -81,6 +81,38 @@
             <div class="swiper-pagination"></div>
         </div>
     </div>
+
+    {% for recommendation in recommendations %}
+        <!-- Full review {{ recommendation.id }} -->
+        <div id="review-{{ recommendation.id }}" class="popup mfp-hide mfp-with-anim">
+            <div class="row">
+                <div class="col-12 col-sm-2 full-rewiew-con-avatar">
+                    <figure class="box box-avatar overflow-hidden">
+                        {% if recommendation.imageUrl %}
+                            <img src="{{ asset(recommendation.imageUrl) }}" alt="{{ recommendation.fullName }}">
+                        {% else %}
+                            <img src="{{ asset('assets/images/avatar-1.png') }}" alt="{{ recommendation.fullName }}">
+                        {% endif %}
+                    </figure>
+                    <div class="review-icon-quote"></div>
+                </div>
+                <div class="col-12 col-sm-10 full-rewiew-con-text">
+                    <h2 class="title title--h2 mb-1">{{ recommendation.fullName }}</h2>
+                    <h4 class="title title--h4 mb-1">{{ recommendation.currentRole }}</h4>
+                    {% if recommendation.recommandedAt %}
+                        <span class="review-date">{{ recommendation.recommandedAt|format_date(pattern='MMMM y')|capitalize }}</span>
+                    {% endif %}
+                    {% if recommendation.roleAtThatTime %}
+                        <div class="review-role-past text-secondary"><small><i>{{ recommendation.roleAtThatTime }}</i></small></div>
+                    {% endif %}
+                    <div class="mt-2">
+                        {{ recommendation.content|nl2br }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
 
     <!-- Clients -->
     <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
@@ -103,33 +135,3 @@
         <div class="swiper-pagination"></div>
     </div>
 </div>
-
-{% for recommendation in recommendations %}
-    <!-- Full review {{ recommendation.id }} -->
-    <div id="review-{{ recommendation.id }}" class="popup mfp-hide mfp-with-anim">
-        <div class="row">
-            <div class="col-12 col-sm-2 full-rewiew-con-avatar">
-                <figure class="box box-avatar">
-                    {% if recommendation.imageUrl %}
-                        <img src="{{ asset(recommendation.imageUrl) }}" alt="{{ recommendation.fullName }}">
-                    {% else %}
-                        <img src="{{ asset('assets/images/avatar-1.png') }}" alt="{{ recommendation.fullName }}">
-                    {% endif %}
-                </figure>
-                <div class="review-icon-quote"></div>
-            </div>
-            <div class="col-12 col-sm-10 full-rewiew-con-text">
-                <h2 class="title title--h2 mb-1">{{ recommendation.fullName }} - {{ recommendation.currentRole }}</h2>
-                {% if recommendation.recommandedAt %}
-                    <span class="review-date">{{ recommendation.recommandedAt|date('d F, Y') }}</span>
-                {% endif %}
-                {% if recommendation.roleAtThatTime %}
-                    <div class="review-role-past"><small>{{ recommendation.firstname }} {{ 'recommendation.at_that_time'|trans }}: {{ recommendation.roleAtThatTime }} de {{ personalInfo.firstname }}</small></div>
-                {% endif %}
-                <div class="mt-2">
-                    {{ recommendation.content|nl2br }}
-                </div>
-            </div>
-        </div>
-    </div>
-{% endfor %}
