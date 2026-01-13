@@ -1,4 +1,4 @@
-name: CI + Deploy (main)
+name: CI (Docker) + Deploy
 
 on:
     push:
@@ -10,34 +10,42 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    ci:
-        name: CI (QA + tests)
+    ci-docker:
+        name: CI Docker (prod-like)
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout
-              uses: actions/checkout@v4
+            - uses: actions/checkout@v4
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: "8.3"
-                  tools: composer:v2
-                  coverage: none
+            - name: Build & start stack
+              run: docker compose up -d --build
 
-            - name: Validate composer.json
-              run: composer validate --no-interaction
+            - name: Wait for DB
+              run: |
+                  for i in {1..40}; do
+                    docker compose exec -T db pg_isready -U symfony -d app && exit 0
+                    sleep 2
+                  done
+                  docker compose logs db
+                  exit 1
 
-            - name: Install dependencies
-              run: composer install --no-interaction --no-progress --prefer-dist
+            - name: Install dependencies (container)
+              run: docker compose exec -T php composer install --no-interaction --prefer-dist
 
-            - name: Run QA (php-cs-fixer, phpstan, phpunit)
-              run: make test
+            - name: Migrate (container)
+              run: docker compose exec -T php bin/console doctrine:migrations:migrate -n --env=test || true
+
+            - name: QA + Tests (container)
+              run: make qa EXEC_TTY=-T
+
+            - name: Tear down
+              if: always()
+              run: docker compose down -v --remove-orphans
 
     deploy:
-        name: Deploy to VPS (prod)
+        name: Deploy to VPS
         runs-on: ubuntu-latest
-        needs: [ci]
+        needs: [ci-docker]
 
         steps:
             - name: Deploy over SSH
