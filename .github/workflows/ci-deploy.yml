@@ -36,7 +36,7 @@ jobs:
               run: docker compose exec -T php bin/console doctrine:migrations:migrate -n --env=test || true
 
             - name: QA + Tests (container)
-              run: make qa EXEC_TTY=-T
+              run: make test EXEC_TTY=-T
 
             - name: Tear down
               if: always()
