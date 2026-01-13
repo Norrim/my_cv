@@ -1,5 +1,14 @@
 # ==== Config ====
-DC        = docker compose
+SHELL := /bin/bash
+
+# Compose files
+DC_DEV   = docker compose -f docker-compose.yml
+DC_PROD  = docker compose -f docker-compose.prod.yml
+
+# Default to dev (override with: DC="$(DC_PROD)")
+DC ?= $(DC_DEV)
+
+# Services
 PHP_SVC   = php
 NGINX_SVC = nginx
 DB_SVC    = db
@@ -7,32 +16,44 @@ REDIS_SVC = redis
 RMQ_SVC   = rabbitmq
 MAIL_SVC  = mailhog
 
-CONSOLE   = $(DC) exec $(PHP_SVC) bin/console
-COMPOSER  = $(DC) exec $(PHP_SVC) composer
-PHP       = $(DC) exec $(PHP_SVC) php
+# In CI / GitHub Actions (SSH): no TTY => pass EXEC_TTY=-T
+EXEC_TTY ?=
+
+# Commands
+CONSOLE   = $(DC) exec $(EXEC_TTY) $(PHP_SVC) bin/console
+COMPOSER  = $(DC) exec $(EXEC_TTY) $(PHP_SVC) composer
+PHP       = $(DC) exec $(EXEC_TTY) $(PHP_SVC) php
 
 # ==== Aide ====
 .PHONY: help
 help:
 	@echo "Cibles disponibles :"
-	@echo "  up           - Build & démarre les services"
-	@echo "  build        - Build les images"
-	@echo "  start/stop   - Démarre / stoppe les services"
-	@echo "  down         - Stoppe et supprime les conteneurs"
-	@echo "  restart      - Redémarre les services"
-	@echo "  ps           - Liste les services"
-	@echo "  logs         - Suivi des logs (tous services)"
-	@echo "  php          - Shell dans le conteneur PHP"
-	@echo "  composer i   - composer install"
-	@echo "  cache-clear  - Vide le cache Symfony"
-	@echo "  c,migrate    - console & migrations"
-	@echo "  db-shell     - Shell SQL (psql) dans la DB"
-	@echo "  db-reset     - Drop + Create + Migrate (DANGER, DEV)"
-	@echo "  fixtures     - Charge les fixtures (si présentes)"
-	@echo "  consume      - Lance le worker Messenger (async)"
-	@echo "  qa           - cs-check + phpstan + phpunit"
-	@echo "  cs, stan, test - Qualité et tests unitaires"
-	@echo "  prune        - Nettoie volumes/images non utilisés"
+	@echo "  up                 - Build & démarre les services (dev par défaut)"
+	@echo "  build              - Build les images"
+	@echo "  start/stop         - Démarre / stoppe les services"
+	@echo "  down               - Stoppe et supprime les conteneurs"
+	@echo "  restart            - Redémarre les services (sans down)"
+	@echo "  ps                 - Liste les services"
+	@echo "  logs               - Suivi des logs (tous services)"
+	@echo "  php                - Shell dans le conteneur PHP"
+	@echo "  composer           - composer install"
+	@echo "  cache-clear        - Vide le cache Symfony"
+	@echo "  cache-warmup       - Warmup du cache Symfony"
+	@echo "  c                  - Ouvre la console Symfony (bin/console)"
+	@echo "  migrate/diff       - Migrations doctrine"
+	@echo "  db-shell           - Shell SQL (psql) dans la DB"
+	@echo "  db-reset           - Drop + Create + Migrate (DANGER, DEV)"
+	@echo "  fixtures           - Charge les fixtures (si présentes)"
+	@echo "  consume            - Lance le worker Messenger (async)"
+	@echo "  qa                 - cs + phpstan + phpunit"
+	@echo "  cs/cs-fix/stan/test- Qualité et tests unitaires"
+	@echo "  prune              - Nettoie volumes/images non utilisés"
+	@echo "  git-pull           - Reset hard sur origin/main"
+	@echo "  deploy-prod        - Déploie main en PROD (compose prod + migrate + warmup)"
+	@echo ""
+	@echo "Astuce:"
+	@echo "  PROD: make deploy-prod EXEC_TTY=-T"
+	@echo "  DEV : make up"
 
 # ==== Lifecycle Docker ====
 .PHONY: up build start stop down restart ps logs
@@ -51,8 +72,9 @@ stop:
 down:
 	$(DC) down
 
+# restart sans down => moins de downtime
 restart:
-	$(DC) down && $(DC) up -d --build
+	$(DC) up -d --build
 
 ps:
 	$(DC) ps
@@ -61,15 +83,20 @@ logs:
 	$(DC) logs -f
 
 # ==== Dev utils ====
-.PHONY: sh composer cache-clear
+.PHONY: php composer
 php:
 	$(DC) exec $(PHP_SVC) sh
 
 composer:
 	$(COMPOSER) install --no-interaction --prefer-dist
 
-cache:
+# ==== Cache Symfony ====
+.PHONY: cache-clear cache-warmup
+cache-clear:
 	$(CONSOLE) cache:clear
+
+cache-warmup:
+	$(CONSOLE) cache:warmup
 
 # ==== Symfony / Doctrine ====
 .PHONY: c migrate diff db-shell db-reset fixtures
@@ -99,7 +126,7 @@ consume:
 	$(CONSOLE) messenger:consume async -vv
 
 # ==== Qualité & tests ====
-.PHONY: qa cs stan test
+.PHONY: qa cs cs-fix stan test
 qa: cs stan test
 
 cs:
@@ -113,8 +140,32 @@ stan:
 
 test:
 	$(PHP) -d memory_limit=-1 bin/phpunit
+
 # ==== Nettoyage ====
 .PHONY: prune
 prune:
 	$(DC) down -v --remove-orphans
 	docker system prune -f
+
+# ==== Deploy ====
+.PHONY: git-pull deploy-prod deploy-prod-nomigrate
+
+git-pull:
+	@echo "== Git pull (origin/main) =="
+	git fetch --all --prune
+	git reset --hard origin/main
+
+# Déploie la branche main en prod, en utilisant UNIQUEMENT docker-compose.prod.yml
+deploy-prod: git-pull
+	@echo "== Compose up PROD (build) =="
+	$(MAKE) up DC="$(DC_PROD)"
+	@echo "== Migrations PROD =="
+	$(MAKE) migrate DC="$(DC_PROD)"
+	@echo "== Cache warmup PROD =="
+	$(MAKE) cache-warmup DC="$(DC_PROD)"
+	@echo "✅ Deploy PROD terminé"
+
+deploy-prod-nomigrate: git-pull
+	$(MAKE) up DC="$(DC_PROD)"
+	$(MAKE) cache-warmup DC="$(DC_PROD)"
+	@echo "✅ Deploy PROD terminé (sans migrations)"
