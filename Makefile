@@ -173,7 +173,7 @@ deploy-prod: git-pull
 	$(MAKE) migrate DC="$(DC_PROD)"
 
 	@echo "== Cache clear (PROD) =="
-	$(CONSOLE) cache:clear --env=prod
+	$(MAKE) cache-clear DC="$(DC_PROD)"
 
 	@echo "== Restart PHP (flush OPCache) =="
 	$(DC_PROD) restart $(PHP_SVC)
