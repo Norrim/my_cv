@@ -74,11 +74,28 @@ Le projet utilise un `Makefile` pour simplifier les tâches courantes. Tapez `ma
 
 ## 🚢 Déploiement
 
-Le déploiement en production est automatisé via :
+Le projet est configuré pour un déploiement continu via **GitHub Actions**.
+
+### Manuel
+Le déploiement en production peut être lancé manuellement depuis le serveur :
 ```bash
 make deploy-prod
 ```
 Cette commande effectue un `git pull`, build les images de production, lance les migrations et préchauffe le cache.
+
+### Automatique (CI/CD)
+Le workflow GitHub Actions `.github/workflows/ci-deploy.yml` automatise le processus à chaque push sur la branche `main` :
+
+1.  **CI Docker** : Build de l'image, installation des dépendances et exécution des tests (`make test`).
+2.  **Déploiement** : Connexion SSH au VPS et exécution de `make deploy-prod`.
+
+#### Secrets GitHub nécessaires
+Pour que le déploiement automatique fonctionne, les secrets suivants doivent être configurés dans le dépôt GitHub :
+- `VPS_HOST` : IP ou domaine du serveur.
+- `VPS_USER` : Utilisateur SSH.
+- `VPS_SSH_KEY` : Clé privée SSH autorisée.
+- `VPS_PATH` : Chemin absolu du projet sur le serveur (ex: `/home/user/my_cv`).
+- `VPS_PORT` : (Optionnel) Port SSH, défaut 22.
 
 ---
 *Projet généré et maintenu avec Symfony 7.*
