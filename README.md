@@ -99,3 +99,4 @@ Pour que le déploiement automatique fonctionne, les secrets suivants doivent ê
 
 ---
 *Projet généré et maintenu avec Symfony 7.*
+
