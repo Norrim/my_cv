@@ -158,24 +158,24 @@ prune:
 	docker system prune -f
 
 # ==== Deploy ====
-.PHONY: git-pull deploy-prod deploy-prod-nomigrate
+.PHONY: git-pull deploy-prod
 
 git-pull:
-	@echo "== Git pull (origin/main) =="
+	@echo "== Git sync (origin/main) =="
 	git fetch --all --prune
 	git reset --hard origin/main
 
-# Déploie la branche main en prod, en utilisant UNIQUEMENT docker-compose.prod.yml
 deploy-prod: git-pull
 	@echo "== Compose up PROD (build) =="
 	$(MAKE) up DC="$(DC_PROD)"
-	@echo "== Migrations PROD =="
-	$(MAKE) migrate DC="$(DC_PROD)"
-	@echo "== Cache warmup PROD =="
-	$(MAKE) cache-warmup DC="$(DC_PROD)"
-	@echo "✅ Deploy PROD terminé"
 
-deploy-prod-nomigrate: git-pull
-	$(MAKE) up DC="$(DC_PROD)"
-	$(MAKE) cache-warmup DC="$(DC_PROD)"
-	@echo "✅ Deploy PROD terminé (sans migrations)"
+	@echo "== Migrations (PROD) =="
+	$(MAKE) migrate DC="$(DC_PROD)"
+
+	@echo "== Cache clear (PROD) =="
+	$(CONSOLE) cache:clear --env=prod
+
+	@echo "== Restart PHP (flush OPCache) =="
+	$(DC_PROD) restart $(PHP_SVC)
+
+	@echo "✅ Deploy PROD terminé"

@@ -32,9 +32,6 @@ jobs:
             - name: Install dependencies (container)
               run: docker compose exec -T php composer install --no-interaction --prefer-dist
 
-            - name: Migrate (container)
-              run: docker compose exec -T php bin/console doctrine:migrations:migrate -n --env=test || true
-
             - name: QA + Tests (container)
               run: make test EXEC_TTY=-T
 
