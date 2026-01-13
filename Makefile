@@ -138,7 +138,17 @@ cs-fix:
 stan:
 	$(PHP) -d memory_limit=-1 vendor/bin/phpstan analyse --no-progress
 
-test:
+test: db-test migrate-test phpunit
+
+.PHONY: db-test migrate-test phpunit
+
+db-test:
+	$(CONSOLE) doctrine:database:create --env=test --if-not-exists
+
+migrate-test:
+	$(CONSOLE) doctrine:migrations:migrate --env=test -n
+
+phpunit:
 	$(PHP) -d memory_limit=-1 bin/phpunit
 
 # ==== Nettoyage ====
