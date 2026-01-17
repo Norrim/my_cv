@@ -1,66 +1,128 @@
-name: CI (Docker) + Deploy
+name: CI + Build Images + Deploy (k3s)
 
 on:
-    pull_request:
-        branches: ["main"]
-    push:
-        branches: ["main"]
-    workflow_dispatch:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
+  workflow_dispatch:
 
 concurrency:
-    group: prod-main
-    cancel-in-progress: true
+  group: prod-main
+  cancel-in-progress: true
+
+env:
+  IMAGE_PHP: ghcr.io/norrim/my-cv-php
+  IMAGE_NGINX: ghcr.io/norrim/my-cv-nginx
 
 jobs:
-    ci-docker:
-        name: CI Docker (prod-like)
-        runs-on: ubuntu-latest
+  ci-docker:
+    name: CI Docker (prod-like)
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Build & start stack
-              run: docker compose up -d --build
+      - name: Build & start stack
+        run: docker compose up -d --build
 
-            - name: Wait for DB
-              run: |
-                  for i in {1..40}; do
-                    docker compose exec -T db pg_isready -U symfony -d app && exit 0
-                    sleep 2
-                  done
-                  docker compose logs db
-                  exit 1
+      - name: Wait for DB
+        run: |
+          for i in {1..40}; do
+            docker compose exec -T db pg_isready -U symfony -d app && exit 0
+            sleep 2
+          done
+          docker compose logs db
+          exit 1
 
-            - name: Install dependencies (container)
-              run: docker compose exec -T php composer install --no-interaction --prefer-dist
+      - name: Install dependencies (container)
+        run: docker compose exec -T php composer install --no-interaction --prefer-dist
 
-            - name: QA + Tests (container)
-              run: make test EXEC_TTY=-T
+      - name: QA + Tests (container)
+        run: make test EXEC_TTY=-T
 
-            - name: Tear down
-              if: always()
-              run: docker compose down -v --remove-orphans
+      - name: Tear down
+        if: always()
+        run: docker compose down -v --remove-orphans
 
-    deploy:
-        name: Deploy to VPS
-        runs-on: ubuntu-latest
-        needs: [ci-docker]
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  build-and-push:
+    name: Build & Push images (GHCR)
+    runs-on: ubuntu-latest
+    needs: [ci-docker]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
-        steps:
-            - name: Deploy over SSH
-              uses: appleboy/ssh-action@v1.0.3
-              with:
-                  host: ${{ secrets.VPS_HOST }}
-                  username: ${{ secrets.VPS_USER }}
-                  key: ${{ secrets.VPS_SSH_KEY }}
-                  port: ${{ secrets.VPS_PORT || 22 }}
-                  script_stop: true
-                  script: |
-                      set -euo pipefail
-                      cd "${{ secrets.VPS_PATH }}"
-                      pwd
-                      ls -la
-                      git rev-parse HEAD
-                      git log -1 --oneline
-                      make deploy-prod EXEC_TTY=-T
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push PHP
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/php/Dockerfile.prod
+          push: true
+          tags: |
+            ${{ env.IMAGE_PHP }}:prod
+            ${{ env.IMAGE_PHP }}:${{ github.sha }}
+
+      - name: Build & push Nginx
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/nginx/Dockerfile.prod
+          push: true
+          tags: |
+            ${{ env.IMAGE_NGINX }}:prod
+            ${{ env.IMAGE_NGINX }}:${{ github.sha }}
+
+  deploy-k3s:
+    name: Deploy to k3s (VPS)
+    runs-on: ubuntu-latest
+    needs: [build-and-push]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy over SSH (kubectl apply + rollout)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd "${{ secrets.VPS_PATH }}"
+
+            echo "== BEFORE =="
+            pwd
+            ls -la
+            git rev-parse HEAD
+            git log -1 --oneline
+
+            git fetch --all
+            git reset --hard origin/main
+
+            echo "== AFTER =="
+            git rev-parse HEAD
+            git log -1 --oneline
+            git status
+
+            kubectl apply -f k8s/prod
+
+            kubectl -n cv-prod rollout restart deploy/php deploy/nginx
+            kubectl -n cv-prod rollout status deploy/php --timeout=180s
+            kubectl -n cv-prod rollout status deploy/nginx --timeout=180s
