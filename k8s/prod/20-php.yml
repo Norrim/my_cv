@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: php
-          image: docker.io/library/cvsite-php:prod
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/norrim/my-cv-php:prod
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: cv-secrets

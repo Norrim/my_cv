@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: docker.io/library/cvsite-nginx:prod
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/norrim/my-cv-nginx:prod
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           readinessProbe:
