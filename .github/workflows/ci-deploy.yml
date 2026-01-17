@@ -106,8 +106,20 @@ jobs:
           script: |
             set -euo pipefail
             cd "${{ secrets.VPS_PATH }}"
+
+            echo "== BEFORE =="
+            pwd
+            ls -la
+            git rev-parse HEAD
+            git log -1 --oneline
+
             git fetch --all
             git reset --hard origin/main
+
+            echo "== AFTER =="
+            git rev-parse HEAD
+            git log -1 --oneline
+            git status
 
             kubectl apply -f k8s/prod
 
