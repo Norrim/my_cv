@@ -59,4 +59,8 @@ jobs:
                   script: |
                       set -euo pipefail
                       cd "${{ secrets.VPS_PATH }}"
+                      pwd
+                      ls -la
+                      git rev-parse HEAD
+                      git log -1 --oneline
                       make deploy-prod EXEC_TTY=-T
