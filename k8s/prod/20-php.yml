@@ -13,15 +13,27 @@ spec:
       labels:
         app: php
     spec:
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: uploads
+
       containers:
         - name: php
           image: ghcr.io/norrim/my-cv-php:prod
           imagePullPolicy: Always
+
           envFrom:
             - secretRef:
                 name: cv-secrets
+
           ports:
             - containerPort: 9000
+
+          volumeMounts:
+            - name: uploads
+              mountPath: /var/www/html/public/assets/images
+
           readinessProbe:
             tcpSocket:
               port: 9000
