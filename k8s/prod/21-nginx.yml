@@ -13,6 +13,8 @@ spec:
       labels:
         app: nginx
     spec:
+      securityContext:
+        fsGroup: 82
       containers:
         - name: nginx
           image: ghcr.io/norrim/my-cv-nginx:prod
