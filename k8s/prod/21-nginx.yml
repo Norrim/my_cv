@@ -21,15 +21,13 @@ spec:
             - containerPort: 80
           volumeMounts:
             - name: uploads
-              mountPath: /var/www/html/public/assets/images
-              readOnly: true
+              mountPath: /var/www/html/public/uploads
           readinessProbe:
             httpGet:
               path: /
               port: 80
             initialDelaySeconds: 5
             periodSeconds: 5
-
       volumes:
         - name: uploads
           persistentVolumeClaim:

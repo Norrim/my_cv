@@ -39,5 +39,4 @@ docker-compose.prod.yml
 /traefik/
 
 #images
-/public/assets/images/clients/
-/public/assets/images/recommendations/
+/public/uploads

@@ -5,8 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     tinymce_api_key: '%env(TINYMCE_API_KEY)%'
-    clients_logos_directory: '%kernel.project_dir%/public/assets/images/clients'
-    recommendations_images_directory: '%kernel.project_dir%/public/assets/images/recommendations'
+    clients_logos_directory: '%kernel.project_dir%/public/uploads/images/clients'
+    recommendations_images_directory: '%kernel.project_dir%/public/uploads/images/recommendations'
 
 services:
     # default configuration for services in *this* file
