@@ -13,30 +13,27 @@ spec:
       labels:
         app: nginx
     spec:
-      volumes:
-        - name: uploads
-          persistentVolumeClaim:
-            claimName: uploads
-
       containers:
         - name: nginx
           image: ghcr.io/norrim/my-cv-nginx:prod
           imagePullPolicy: Always
-
           ports:
             - containerPort: 80
-
           volumeMounts:
             - name: uploads
               mountPath: /var/www/html/public/assets/images
               readOnly: true
-
           readinessProbe:
             httpGet:
               path: /
               port: 80
             initialDelaySeconds: 5
             periodSeconds: 5
+
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: uploads
 ---
 apiVersion: v1
 kind: Service
