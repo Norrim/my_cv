@@ -72,7 +72,7 @@ final class RecommendationController extends AbstractController
                     }
 
                     $imageFileName = $this->fileUploader->upload($imageFile);
-                    $recommendation->setImageUrl('assets/images/recommendations/' . $imageFileName);
+                    $recommendation->setImageUrl('uploads/images/recommendations/' . $imageFileName);
                 }
 
                 $this->em->persist($recommendation);
