@@ -53,14 +53,14 @@ class RecommendationType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
-                    new File([
-                        'maxSize' => '2M',
-                        'mimeTypes' => [
+                    new File(
+                        maxSize: '2M',
+                        mimeTypes: [
                             'image/jpeg',
                             'image/png',
                         ],
-                        'mimeTypesMessage' => 'Veuillez uploader une image valide (JPG, PNG)',
-                    ])
+                        mimeTypesMessage: 'Veuillez uploader une image valide (JPG, PNG)',
+                    )
                 ],
             ])
         ;
