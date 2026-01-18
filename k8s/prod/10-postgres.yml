@@ -9,6 +9,7 @@ spec:
   resources:
     requests:
       storage: 10Gi
+  storageClassName: local-path
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -28,13 +29,9 @@ spec:
       containers:
         - name: postgres
           image: postgres:15
-          env:
-            - name: POSTGRES_DB
-              value: app
-            - name: POSTGRES_USER
-              value: symfony
-            - name: POSTGRES_PASSWORD
-              value: symfony
+          envFrom:
+            - secretRef:
+                name: postgres-secret
           ports:
             - containerPort: 5432
           volumeMounts:
@@ -42,9 +39,14 @@ spec:
               mountPath: /var/lib/postgresql/data
           readinessProbe:
             exec:
-              command: ["sh", "-lc", "pg_isready -U symfony -d app"]
+              command: ["sh", "-lc", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
             initialDelaySeconds: 5
             periodSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["sh", "-lc", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+            initialDelaySeconds: 20
+            periodSeconds: 10
       volumes:
         - name: data
           persistentVolumeClaim:

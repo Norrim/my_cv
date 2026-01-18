@@ -95,7 +95,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
-      - name: Deploy over SSH (kubectl apply + rollout)
+      - name: Deploy over SSH (kubectl apply + rollout + secrets)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -121,8 +121,39 @@ jobs:
             git log -1 --oneline
             git status
 
+            echo "== APPLY K8S SECRETS =="
+            # Postgres
+            kubectl -n cv-prod create secret generic postgres-secret \
+              --from-literal=POSTGRES_DB='${{ secrets.POSTGRES_DB }}' \
+              --from-literal=POSTGRES_USER='${{ secrets.POSTGRES_USER }}' \
+              --from-literal=POSTGRES_PASSWORD='${{ secrets.POSTGRES_PASSWORD }}' \
+              --dry-run=client -o yaml | kubectl apply -f -
+
+            # pgAdmin
+            kubectl -n cv-prod create secret generic pgadmin-secret \
+              --from-literal=PGADMIN_DEFAULT_EMAIL='${{ secrets.PGADMIN_EMAIL }}' \
+              --from-literal=PGADMIN_DEFAULT_PASSWORD='${{ secrets.PGADMIN_PASSWORD }}' \
+              --dry-run=client -o yaml | kubectl apply -f -
+
+            # RabbitMQ (si tu l'utilises)
+            kubectl -n cv-prod create secret generic rabbitmq-secret \
+              --from-literal=RABBITMQ_DEFAULT_USER='${{ secrets.RABBITMQ_USER }}' \
+              --from-literal=RABBITMQ_DEFAULT_PASS='${{ secrets.RABBITMQ_PASSWORD }}' \
+              --dry-run=client -o yaml | kubectl apply -f -
+
+            # Symfony app env (cv-secrets)
+            kubectl -n cv-prod create secret generic cv-secrets \
+              --from-literal=APP_SECRET='${{ secrets.APP_SECRET }}' \
+              --from-literal=DATABASE_URL='${{ secrets.DATABASE_URL }}' \
+              --from-literal=MESSENGER_TRANSPORT_DSN='${{ secrets.MESSENGER_TRANSPORT_DSN }}' \
+              --dry-run=client -o yaml | kubectl apply -f -
+
+            echo "== APPLY MANIFESTS =="
             kubectl apply -f k8s/prod
 
-            kubectl -n cv-prod rollout restart deploy/php deploy/nginx
+            echo "== RESTART (reload env) =="
+            kubectl -n cv-prod rollout restart deploy/postgres deploy/rabbitmq deploy/php deploy/nginx deploy/pgadmin || true
+
+            echo "== WAIT =="
             kubectl -n cv-prod rollout status deploy/php --timeout=180s
             kubectl -n cv-prod rollout status deploy/nginx --timeout=180s
