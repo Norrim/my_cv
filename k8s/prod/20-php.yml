@@ -13,21 +13,6 @@ spec:
       labels:
         app: php
     spec:
-      initContainers:
-        - name: init-uploads-perms
-          image: busybox:1.36
-          command: ["sh", "-lc"]
-          args:
-            - |
-              set -e
-              mkdir -p /uploads/recommendations /uploads/clients
-              # www-data sur Alpine = uid/gid 82
-              chown -R 82:82 /uploads
-              chmod -R 775 /uploads
-          volumeMounts:
-            - name: uploads
-              mountPath: /uploads
-
       containers:
         - name: php
           image: ghcr.io/norrim/my-cv-php:prod
@@ -39,13 +24,12 @@ spec:
             - containerPort: 9000
           volumeMounts:
             - name: uploads
-              mountPath: /var/www/html/public/assets/images
+              mountPath: /var/www/html/public/uploads
           readinessProbe:
             tcpSocket:
               port: 9000
             initialDelaySeconds: 5
             periodSeconds: 5
-
       volumes:
         - name: uploads
           persistentVolumeClaim:
