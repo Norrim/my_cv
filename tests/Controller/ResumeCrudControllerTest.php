@@ -10,38 +10,15 @@ use App\Entity\Expertise;
 use App\Entity\Recommendation;
 use App\Entity\Social;
 use App\Entity\PersonalInfo;
-use App\Entity\Users;
-use App\Repository\UsersRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class ResumeCrudControllerTest extends WebTestCase
+final class ResumeCrudControllerTest extends AbstractControllerTest
 {
-    private EntityManagerInterface $em;
-    private UsersRepository $userRepository;
-
-    private function setupDependencies(): void
-    {
-        $this->em = self::getContainer()->get('doctrine')->getManager();
-        $this->userRepository = $this->em->getRepository(Users::class);
-    }
-
-    private function getAdminUser(): Users
-    {
-        return $this->userRepository->findOneBy(['email' => 'test@example.com']);
-    }
-
-    /**
-     * @throws ORMException
-     */
     public function testEducationCrud(): void
     {
-        $client = self::createClient();
-        $this->setupDependencies();
-        $client->loginUser($this->getAdminUser());
+        $client = $this->createAdminClient();
 
+        $this->setupDependencies();
         // Create
         $crawler = $client->request('GET', '/education/new');
         $this->assertResponseIsSuccessful();
@@ -81,10 +58,9 @@ final class ResumeCrudControllerTest extends WebTestCase
 
     public function testExperienceCrud(): void
     {
-        $client = static::createClient();
-        $this->setupDependencies();
-        $client->loginUser($this->getAdminUser());
+        $client = $this->createAdminClient();
 
+        $this->setupDependencies();
         // Create
         $crawler = $client->request('GET', '/experience/new');
         $this->assertResponseIsSuccessful();
@@ -112,10 +88,9 @@ final class ResumeCrudControllerTest extends WebTestCase
 
     public function testExpertiseEditAll(): void
     {
-        $client = static::createClient();
-        $this->setupDependencies();
-        $client->loginUser($this->getAdminUser());
+        $client = $this->createAdminClient();
 
+        $this->setupDependencies();
         $crawler = $client->request('GET', '/expertise/edit-all');
         $this->assertResponseIsSuccessful();
 
@@ -149,10 +124,9 @@ final class ResumeCrudControllerTest extends WebTestCase
 
     public function testRecommendationEditAll(): void
     {
-        $client = self::createClient();
-        $this->setupDependencies();
-        $client->loginUser($this->getAdminUser());
+        $client = $this->createAdminClient();
 
+        $this->setupDependencies();
         $crawler = $client->request('GET', '/recommendation/edit-all');
         $this->assertResponseIsSuccessful();
 
@@ -198,10 +172,9 @@ final class ResumeCrudControllerTest extends WebTestCase
 
     public function testPersonalInfoEdit(): void
     {
-        $client = self::createClient();
-        $this->setupDependencies();
-        $client->loginUser($this->getAdminUser());
+        $client = $this->createAdminClient();
 
+        $this->setupDependencies();
         $crawler = $client->request('GET', '/personal-info/edit');
         $this->assertResponseIsSuccessful();
 
@@ -217,10 +190,9 @@ final class ResumeCrudControllerTest extends WebTestCase
 
     public function testSocialEditAll(): void
     {
-        $client = self::createClient();
-        $this->setupDependencies();
-        $client->loginUser($this->getAdminUser());
+        $client = $this->createAdminClient();
 
+        $this->setupDependencies();
         $crawler = $client->request('GET', '/social/edit-all');
         $this->assertResponseIsSuccessful();
 

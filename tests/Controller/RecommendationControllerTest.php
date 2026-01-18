@@ -5,34 +5,15 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\Recommendation;
-use App\Entity\Users;
-use App\Repository\UsersRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class RecommendationControllerTest extends WebTestCase
+final class RecommendationControllerTest extends AbstractControllerTest
 {
-    private EntityManagerInterface $em;
-    private UsersRepository $userRepository;
-
-    private function setupDependencies(): void
-    {
-        $this->em = self::getContainer()->get('doctrine')->getManager();
-        $this->userRepository = $this->em->getRepository(Users::class);
-    }
-
-    private function getAdminUser(): Users
-    {
-        return $this->userRepository->findOneBy(['email' => 'test@example.com']);
-    }
-
     public function testEditAllRecommendations(): void
     {
-        $client = self::createClient();
-        $this->setupDependencies();
-        $client->loginUser($this->getAdminUser());
+        $client = $this->createAdminClient();
 
+        $this->setupDependencies();
         $crawler = $client->request('GET', '/recommendation/edit-all');
         $this->assertResponseIsSuccessful();
 

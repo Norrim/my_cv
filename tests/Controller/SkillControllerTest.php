@@ -5,22 +5,9 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\Skill;
-use App\Entity\Users;
-use App\Repository\UsersRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class SkillControllerTest extends WebTestCase
+final class SkillControllerTest extends AbstractControllerTest
 {
-    private EntityManagerInterface $em;
-    private UsersRepository $userRepository;
-
-    private function setupDependencies(): void
-    {
-        $this->em = self::getContainer()->get('doctrine')->getManager();
-        $this->userRepository = $this->em->getRepository(Users::class);
-    }
-
     public function testNewSkillRequiresLogin(): void
     {
         $client = self::createClient();
@@ -31,12 +18,9 @@ final class SkillControllerTest extends WebTestCase
 
     public function testCreateSkill(): void
     {
-        $client = self::createClient();
+        $client = $this->createAdminClient();
+
         $this->setupDependencies();
-
-        $user = $this->userRepository->findOneBy(['email' => 'test@example.com']);
-        $client->loginUser($user);
-
         $crawler = $client->request('GET', '/skill/new');
         $this->assertResponseIsSuccessful();
 
@@ -55,12 +39,9 @@ final class SkillControllerTest extends WebTestCase
 
     public function testEditSkill(): void
     {
-        $client = self::createClient();
+        $client = $this->createAdminClient();
+
         $this->setupDependencies();
-
-        $user = $this->userRepository->findOneBy(['email' => 'test@example.com']);
-        $client->loginUser($user);
-
         $skill = new Skill();
         $skill->setName('To be edited');
         $skill->setPercentage(50);
@@ -83,12 +64,9 @@ final class SkillControllerTest extends WebTestCase
 
     public function testDeleteSkill(): void
     {
-        $client = self::createClient();
+        $client = $this->createAdminClient();
+
         $this->setupDependencies();
-
-        $user = $this->userRepository->findOneBy(['email' => 'test@example.com']);
-        $client->loginUser($user);
-
         $skill = new Skill();
         $skill->setName('To be deleted');
         $skill->setPercentage(50);

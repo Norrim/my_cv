@@ -5,33 +5,14 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\PersonalInfo;
-use App\Entity\Users;
-use App\Repository\UsersRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class PersonalInfoControllerTest extends WebTestCase
+final class PersonalInfoControllerTest extends AbstractControllerTest
 {
-    private EntityManagerInterface $em;
-    private UsersRepository $userRepository;
-
-    private function setupDependencies(): void
-    {
-        $this->em = self::getContainer()->get('doctrine')->getManager();
-        $this->userRepository = $this->em->getRepository(Users::class);
-    }
-
-    private function getAdminUser(): Users
-    {
-        return $this->userRepository->findOneBy(['email' => 'test@example.com']);
-    }
-
     public function testEditPersonalInfo(): void
     {
-        $client = self::createClient();
-        $this->setupDependencies();
-        $client->loginUser($this->getAdminUser());
+        $client = $this->createAdminClient();
 
+        $this->setupDependencies();
         foreach ($this->em->getRepository(PersonalInfo::class)->findAll() as $pi) {
             $this->em->remove($pi);
         }
