@@ -73,7 +73,7 @@ final class ClientController extends AbstractController
                     }
 
                     $logoFileName = $this->fileUploader->upload($logoFile);
-                    $client->setUrl('assets/images/clients/' . $logoFileName);
+                    $client->setUrl('uploads/images/clients/' . $logoFileName);
                 }
 
                 $this->em->persist($client);
