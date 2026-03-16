@@ -6,6 +6,7 @@ namespace App\Tests\Handler;
 
 use App\Handler\CrudHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -22,6 +23,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
+#[AllowMockObjectsWithoutExpectations]
 final class CrudHandlerTest extends TestCase
 {
     private EntityManagerInterface $em;

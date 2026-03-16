@@ -15,7 +15,7 @@ final class FileUploaderTest extends TestCase
     public function testUpload(): void
     {
         $targetDirectory = '/tmp/uploads';
-        $slugger = $this->createMock(SluggerInterface::class);
+        $slugger = $this->createStub(SluggerInterface::class);
         $slugger->method('slug')->willReturn(new UnicodeString('test-file'));
 
         $file = $this->createMock(UploadedFile::class);
@@ -37,7 +37,7 @@ final class FileUploaderTest extends TestCase
     public function testGetTargetDirectory(): void
     {
         $targetDirectory = '/tmp/uploads';
-        $slugger = $this->createMock(SluggerInterface::class);
+        $slugger = $this->createStub(SluggerInterface::class);
         $uploader = new FileUploader($targetDirectory, $slugger);
 
         $this->assertSame($targetDirectory, $uploader->getTargetDirectory());

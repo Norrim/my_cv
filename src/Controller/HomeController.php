@@ -53,7 +53,7 @@ final class HomeController extends AbstractController
             'clients' => $clients,
             'recommendations' => $recommendations,
             'expertises' => $expertises,
-            'contactForm' => $form->createView(),
+            'contactForm' => $form,
         ]);
     }
 }

@@ -179,3 +179,7 @@ deploy-prod: git-pull
 	$(DC_PROD) restart $(PHP_SVC)
 
 	@echo "✅ Deploy PROD terminé"
+
+.PHONY: mate-mcp
+mate-mcp:
+	$(DC) exec -T $(PHP_SVC) ./vendor/bin/mate mcp

@@ -21,7 +21,7 @@ final class ContactType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'class' => 'input form-control',
-                    'placeholder' => 'Full name',
+                    'placeholder' => 'contact.form.name.placeholder',
                     'autocomplete' => 'name',
                 ],
             ])
@@ -29,7 +29,7 @@ final class ContactType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'class' => 'input form-control',
-                    'placeholder' => 'Email address',
+                    'placeholder' => 'contact.form.email.placeholder',
                     'autocomplete' => 'email',
                 ],
             ])
@@ -37,7 +37,7 @@ final class ContactType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'class' => 'textarea form-control',
-                    'placeholder' => 'Your Message (min 10 characters)',
+                    'placeholder' => 'contact.form.message.placeholder',
                     'rows' => '4',
                 ],
             ]);
