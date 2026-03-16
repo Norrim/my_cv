@@ -21,7 +21,6 @@ nav:
     about: "À propos"
     resume: "CV"
     portfolio: "Portfolio"
-    blog: "Blog"
     contact: "Me contacter"
 
 resume:
@@ -81,6 +80,13 @@ resume:
 
 contact:
     send: "Envoyer le message"
+    form:
+        name:
+            placeholder: "Nom complet"
+        email:
+            placeholder: "Adresse email"
+        message:
+            placeholder: "Votre message (min 10 caractères)"
 
 social:
     modal:
