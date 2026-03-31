@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-final class ContactControllerTest extends WebTestCase
+final class ContactControllerTest extends AbstractControllerTest
 {
     public function testContactFormIsRenderedOnHomePage(): void
     {
         $client = self::createClient();
+        $this->setupDependencies();
+        $this->ensurePersonalInfo();
+
         $client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
@@ -22,6 +23,9 @@ final class ContactControllerTest extends WebTestCase
     public function testStep1ValidSubmitAdvancesToStep2(): void
     {
         $client = self::createClient();
+        $this->setupDependencies();
+        $this->ensurePersonalInfo();
+
         $crawler = $client->request('GET', '/');
 
         $form = $crawler->selectButton('contact_flow[navigator][next]')->form([
@@ -39,6 +43,9 @@ final class ContactControllerTest extends WebTestCase
     public function testStep1InvalidSubmitStaysOnStep1(): void
     {
         $client = self::createClient();
+        $this->setupDependencies();
+        $this->ensurePersonalInfo();
+
         $crawler = $client->request('GET', '/');
 
         $form = $crawler->selectButton('contact_flow[navigator][next]')->form([
