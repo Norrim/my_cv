@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Entity\PersonalInfo;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -50,5 +51,26 @@ abstract class AbstractControllerTest extends WebTestCase
         }
 
         return $user;
+    }
+
+    protected function ensurePersonalInfo(): PersonalInfo
+    {
+        $repo = $this->em->getRepository(PersonalInfo::class);
+        $personalInfo = $repo->findOneBy([]);
+
+        if (!$personalInfo) {
+            $personalInfo = (new PersonalInfo())
+                ->setFirstname('John')
+                ->setName('Doe')
+                ->setTitle('Developer')
+                ->setEmail('john@example.com')
+                ->setPhoneNumber('0600000000')
+                ->setLocalisation('Paris, France');
+
+            $this->em->persist($personalInfo);
+            $this->em->flush();
+        }
+
+        return $personalInfo;
     }
 }
