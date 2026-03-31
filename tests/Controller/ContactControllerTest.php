@@ -8,41 +8,48 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class ContactControllerTest extends WebTestCase
 {
-    public function testSubmitContactForm(): void
+    public function testContactFormIsRenderedOnHomePage(): void
     {
         $client = self::createClient();
-        $crawler = $client->request('GET', '/');
+        $client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
-
-        $form = $crawler->filter('#sf-contact-form button[type="submit"]')->form();
-        $form['contact[name]'] = 'John Doe';
-        $form['contact[email]'] = 'john@example.com';
-        $form['contact[message]'] = 'Hello, this is a test message with enough length.';
-
-        $client->submit($form);
-
-        $this->assertResponseRedirects('/#contact');
-        $client->followRedirect();
-
-        $this->assertSelectorExists('.alert-success');
+        $this->assertSelectorExists('#contact');
+        $this->assertSelectorExists('input[name="contact_flow[identity][lastName]"]');
+        $this->assertSelectorExists('input[name="contact_flow[identity][email]"]');
     }
 
-    public function testSubmitContactFormInvalid(): void
+    public function testStep1ValidSubmitAdvancesToStep2(): void
     {
         $client = self::createClient();
         $crawler = $client->request('GET', '/');
 
-        $form = $crawler->filter('#sf-contact-form button[type="submit"]')->form();
-        $form['contact[name]'] = '';
-        $form['contact[email]'] = 'invalid-email';
-        $form['contact[message]'] = 'short';
+        $form = $crawler->selectButton('contact_flow[navigator][next]')->form([
+            'contact_flow[identity][lastName]' => 'Dupont',
+            'contact_flow[identity][firstName]' => 'Jean',
+            'contact_flow[identity][email]' => 'jean.dupont@example.com',
+        ]);
 
         $client->submit($form);
 
-        $this->assertResponseRedirects('/#contact');
-        $client->followRedirect();
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('input[name="contact_flow[mission][location]"]');
+    }
 
-        $this->assertSelectorExists('.alert-danger');
+    public function testStep1InvalidSubmitStaysOnStep1(): void
+    {
+        $client = self::createClient();
+        $crawler = $client->request('GET', '/');
+
+        $form = $crawler->selectButton('contact_flow[navigator][next]')->form([
+            'contact_flow[identity][lastName]' => '',
+            'contact_flow[identity][firstName]' => '',
+            'contact_flow[identity][email]' => 'invalid-email',
+        ]);
+
+        $client->submit($form);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertSelectorExists('input[name="contact_flow[identity][lastName]"]');
     }
 }

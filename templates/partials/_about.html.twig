@@ -1,4 +1,4 @@
-<div id="about" class="tab-pane fade show active _tabcontent _active" role="tabpanel" aria-labelledby="about-tab">
+<div id="about" class="tab-pane fade {{ not contactFormActive|default(false) ? 'show active _active' }} _tabcontent" role="tabpanel" aria-labelledby="about-tab">
     <!-- About Me -->
     {% include 'about/about_me/about_me.html.twig' %}
     {% include 'about/expertise/_expertises.html.twig' %}

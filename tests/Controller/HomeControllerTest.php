@@ -18,6 +18,5 @@ final class HomeControllerTest extends WebTestCase
         $this->assertSelectorExists('#about');
         $this->assertSelectorExists('#resume');
         $this->assertSelectorExists('#contact');
-        $this->assertSelectorExists('#sf-contact-form');
     }
 }
