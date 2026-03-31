@@ -1,39 +1,188 @@
 <!-- CONTACT -->
-<div id="contact" class="tab-pane fade _tabcontent" role="tabpanel" aria-labelledby="contact-tab">
+<div id="contact" class="tab-pane fade {{ contactFormActive|default(false) ? 'show active' }} _tabcontent" role="tabpanel" aria-labelledby="contact-tab">
     <div class="pb-0 pb-sm-2">
-        <h1 class="title title--h1 title__separate">Contact</h1>
+        <h1 class="title title--h1 title__separate">{{ 'contact.wizard.title'|trans }}</h1>
     </div>
 
-    <h2 class="title title--h2">Contact Form</h2>
+    {% set cursor = contactForm.vars.cursor %}
+    {% set currentStep = cursor.currentStep %}
 
-    {{ form_start(contactForm, {
-        attr: { id: 'sf-contact-form' },
-        action: path('app_contact_submit')
-    }) }}
+    {% set stepLabels = {
+        'identity': 'contact.step1.title'|trans,
+        'mission': 'contact.step2.title'|trans,
+        'project': 'contact.step3.title'|trans,
+    } %}
+
+    {# Step progress #}
+    <div class="contact-wizard-progress mb-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            {% for step in contactForm.vars.visible_steps %}
+                <div class="wizard-step-indicator {% if step.index < cursor.stepIndex %}wizard-step--done{% elseif step.is_current_step %}wizard-step--active{% else %}wizard-step--pending{% endif %}">
+                    <span class="wizard-step-number">
+                        {% if step.index < cursor.stepIndex %}
+                            <i class="feathericon-check"></i>
+                        {% else %}
+                            {{ step.position }}
+                        {% endif %}
+                    </span>
+                    <span class="wizard-step-label d-none d-sm-inline">{{ stepLabels[step.name] }}</span>
+                </div>
+                {% if not loop.last %}
+                    <div class="wizard-step-connector {% if step.index < cursor.stepIndex %}wizard-step-connector--done{% endif %}"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="progress" style="height: 4px;">
+            <div class="progress-bar bg-primary" style="width: {{ (cursor.stepIndex / cursor.totalSteps) * 100 }}%"></div>
+        </div>
+    </div>
+
+    {# Step title #}
+    <h2 class="title title--h2 mb-4">{{ stepLabels[currentStep] }}</h2>
+
+    {# Form #}
+    {{ form_start(contactForm, { attr: { novalidate: 'novalidate' } }) }}
     {{ form_errors(contactForm) }}
 
-    <div class="row">
-        <div class="form-group col-12 col-md-6">
-            {{ form_widget(contactForm.name) }}
-        </div>
+    <div class="row g-3">
+        {% if currentStep == 'identity' %}
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.identity.lastName, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.identity.lastName) }}
+                    {{ form_errors(contactForm.identity.lastName) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.identity.firstName, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.identity.firstName) }}
+                    {{ form_errors(contactForm.identity.firstName) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.identity.email, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.identity.email) }}
+                    {{ form_errors(contactForm.identity.email) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.identity.company, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.identity.company) }}
+                    {{ form_errors(contactForm.identity.company) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.identity.phone, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.identity.phone) }}
+                    {{ form_errors(contactForm.identity.phone) }}
+                </div>
+            </div>
 
-        <div class="form-group col-12 col-md-6">
-            {{ form_widget(contactForm.email) }}
-        </div>
+        {% elseif currentStep == 'mission' %}
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.mission.contractType, null, { label_attr: { class: 'form-label fw-semibold' } }) }}
+                    <div class="mt-2">
+                        {% for child in contactForm.mission.contractType %}
+                            <div class="form-check">
+                                {{ form_widget(child, { attr: { class: 'form-check-input' } }) }}
+                                {{ form_label(child, null, { label_attr: { class: 'form-check-label' } }) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {{ form_errors(contactForm.mission.contractType) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.mission.workMode, null, { label_attr: { class: 'form-label fw-semibold' } }) }}
+                    <div class="mt-2">
+                        {% for child in contactForm.mission.workMode %}
+                            <div class="form-check">
+                                {{ form_widget(child, { attr: { class: 'form-check-input' } }) }}
+                                {{ form_label(child, null, { label_attr: { class: 'form-check-label' } }) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {{ form_errors(contactForm.mission.workMode) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.mission.location, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.mission.location) }}
+                    {{ form_errors(contactForm.mission.location) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.mission.dailyRate, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.mission.dailyRate) }}
+                    {{ form_errors(contactForm.mission.dailyRate) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.mission.startDate, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.mission.startDate) }}
+                    {{ form_errors(contactForm.mission.startDate) }}
+                </div>
+            </div>
 
-        <div class="form-group col-12 col-md-12">
-            {{ form_widget(contactForm.message) }}
+        {% elseif currentStep == 'project' %}
+            <div class="col-12">
+                <div class="form-group">
+                    {{ form_label(contactForm.project.projectDescription, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.project.projectDescription) }}
+                    {{ form_errors(contactForm.project.projectDescription) }}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    {{ form_label(contactForm.project.techStack, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.project.techStack) }}
+                    {{ form_errors(contactForm.project.techStack) }}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    {{ form_label(contactForm.project.estimatedDuration, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.project.estimatedDuration) }}
+                    {{ form_errors(contactForm.project.estimatedDuration) }}
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    {{ form_label(contactForm.project.freeMessage, null, { label_attr: { class: 'form-label' } }) }}
+                    {{ form_widget(contactForm.project.freeMessage) }}
+                    {{ form_errors(contactForm.project.freeMessage) }}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    {# Navigation #}
+    <div class="contact-form">
+        <div class="row mt-4">
+            <div class="col-12 col-md-6 order-2 order-md-1 text-center text-md-start">
+                {% if contactForm.navigator.previous is defined %}
+                    {{ form_widget(contactForm.navigator.previous, { attr: { class: 'btn btn--secondary' } }) }}
+                {% endif %}
+            </div>
+            <div class="col-12 col-md-6 order-1 order-md-2 text-end">
+                {% if contactForm.navigator.next is defined %}
+                    {{ form_widget(contactForm.navigator.next, { attr: { class: 'btn' } }) }}
+                {% endif %}
+                {% if contactForm.navigator.finish is defined %}
+                    {{ form_widget(contactForm.navigator.finish, { attr: { class: 'btn' } }) }}
+                {% endif %}
+            </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12 col-md-6 order-2 order-md-1 text-center text-md-start">
-        </div>
-        <div class="col-12 col-md-6 order-1 order-md-2 text-end">
-            <button type="submit" class="btn">
-                <i class="font-icon icon-send"></i> {{ 'contact.send'|trans }}
-            </button>
-        </div>
-    </div>
     {{ form_end(contactForm) }}
 </div>

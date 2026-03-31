@@ -80,13 +80,77 @@ resume:
 
 contact:
     send: "Envoyer le message"
-    form:
-        name:
-            placeholder: "Nom complet"
+
+    cta:
+        description: "Vous avez un projet ? Une mission freelance ? Contactez-moi !"
+        subtitle: "Le formulaire vous prend moins de 2 minutes."
+        button: "Démarrer le formulaire de contact"
+
+    wizard:
+        title: "Me contacter"
+        previous: "Précédent"
+        next: "Suivant"
+        review: "Voir le récapitulatif"
+        send: "Confirmer et envoyer"
+        back_home: "Retour"
+        edit: "Modifier"
+
+    step1:
+        title: "Informations du contact"
+        last_name:
+            label: "Nom"
+            placeholder: "Dupont"
+        first_name:
+            label: "Prénom"
+            placeholder: "Jean"
         email:
-            placeholder: "Adresse email"
-        message:
-            placeholder: "Votre message (min 10 caractères)"
+            label: "Email"
+            placeholder: "jean.dupont@exemple.fr"
+        company:
+            label: "Société (optionnel)"
+            placeholder: "Acme Corp"
+        phone:
+            label: "Téléphone (optionnel)"
+            placeholder: "+33 6 12 34 56 78"
+
+    step2:
+        title: "Détails de la mission"
+        contract_type:
+            label: "Type de contrat"
+            freelance: "Freelance"
+            cdi: "CDI"
+            short_mission: "Mission courte"
+        work_mode:
+            label: "Remote / Hybride / Présentiel"
+            remote: "Remote"
+            hybrid: "Hybride"
+            onsite: "Présentiel"
+        location:
+            label: "Localisation (optionnel)"
+            placeholder: "Paris, Lyon, Bordeaux…"
+        daily_rate:
+            label: "TJM proposé (optionnel)"
+            placeholder: "ex : 600 €/jour"
+        start_date:
+            label: "Date de début souhaitée (optionnel)"
+
+    step3:
+        title: "Description du projet"
+        project_description:
+            label: "Description du projet"
+            placeholder: "Décrivez votre projet ou mission en quelques lignes… (min. 20 caractères)"
+        tech_stack:
+            label: "Stack technique (optionnel)"
+            placeholder: "PHP, Symfony, React, PostgreSQL…"
+        estimated_duration:
+            label: "Durée estimée (optionnel)"
+            placeholder: "ex : 3 mois, 6 mois, indéterminé…"
+        free_message:
+            label: "Message libre (optionnel)"
+            placeholder: "Tout ce que vous souhaitez ajouter…"
+
+    step4:
+        title: "Récapitulatif & envoi"
 
 social:
     modal:
