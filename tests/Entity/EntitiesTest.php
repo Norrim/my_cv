@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
-use App\Entity\Client;
-use App\Entity\Expertise;
-use App\Entity\Recommendation;
-use App\Entity\Social;
+use App\Identity\Domain\Entity\Social;
+use App\Portfolio\Domain\Entity\Client;
+use App\Portfolio\Domain\Entity\Expertise;
+use App\Portfolio\Domain\Entity\Recommendation;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 

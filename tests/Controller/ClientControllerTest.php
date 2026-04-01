@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\Client;
-use App\Entity\Users;
+use App\Portfolio\Domain\Entity\Client;
+use App\Security\Domain\Entity\Users;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class ClientControllerTest extends AbstractControllerTest

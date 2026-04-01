@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration;
 
-use App\Entity\Education;
-use App\Form\EducationType;
-use App\Handler\CrudHandler;
+use App\Resume\Domain\Entity\Education;
+use App\Resume\Presentation\Form\EducationType;
+use App\Shared\Application\Handler\CrudHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;

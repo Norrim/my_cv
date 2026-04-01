@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
-use App\Entity\Skill;
+use App\Resume\Domain\Entity\Skill;
 use PHPUnit\Framework\TestCase;
 
 final class SkillTest extends TestCase

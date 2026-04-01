@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Handler;
 
-use App\Handler\CrudHandler;
+use App\Shared\Application\Handler\CrudHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;

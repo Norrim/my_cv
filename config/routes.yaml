@@ -1,5 +1,35 @@
-controllers:
+home_controllers:
     resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+        path: ../src/Home/Presentation/Controller/
+        namespace: App\Home\Presentation\Controller
+    type: attribute
+
+admin_controllers:
+    resource:
+        path: ../src/Admin/Presentation/Controller/
+        namespace: App\Admin\Presentation\Controller
+    type: attribute
+
+identity_controllers:
+    resource:
+        path: ../src/Identity/Presentation/Controller/
+        namespace: App\Identity\Presentation\Controller
+    type: attribute
+
+security_controllers:
+    resource:
+        path: ../src/Security/Presentation/Controller/
+        namespace: App\Security\Presentation\Controller
+    type: attribute
+
+resume_controllers:
+    resource:
+        path: ../src/Resume/Presentation/Controller/
+        namespace: App\Resume\Presentation\Controller
+    type: attribute
+
+portfolio_controllers:
+    resource:
+        path: ../src/Portfolio/Presentation/Controller/
+        namespace: App\Portfolio\Presentation\Controller
     type: attribute

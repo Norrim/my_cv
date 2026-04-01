@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
-use App\Entity\PersonalInfo;
+use App\Identity\Domain\Entity\PersonalInfo;
 use PHPUnit\Framework\TestCase;
 
 final class PersonalInfoTest extends TestCase

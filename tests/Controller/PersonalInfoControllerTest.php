@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\PersonalInfo;
+use App\Identity\Domain\Entity\PersonalInfo;
 
 final class PersonalInfoControllerTest extends AbstractControllerTest
 {
