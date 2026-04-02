@@ -85,4 +85,12 @@ class Social
 
         return $this;
     }
+
+    public function update(string $name, string $url, string $iconClass, int $position): void
+    {
+        $this->name = $name;
+        $this->url = $url;
+        $this->iconClass = $iconClass;
+        $this->position = $position;
+    }
 }

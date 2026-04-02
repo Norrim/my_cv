@@ -51,11 +51,24 @@ class Client
         return $this->url;
     }
 
-    public function setUrl(string $url): self
+    public function hasLogo(): bool
     {
-        $this->url = $url;
+        return $this->url !== null && $this->url !== '';
+    }
 
-        return $this;
+    public function getLogoBasename(): ?string
+    {
+        return $this->hasLogo() ? basename($this->url) : null;
+    }
+
+    public function updateLogoUrl(string $logoPath): void
+    {
+        $this->url = $logoPath;
+    }
+
+    public function clearLogoUrl(): void
+    {
+        $this->url = null;
     }
 
     public function getPosition(): ?int

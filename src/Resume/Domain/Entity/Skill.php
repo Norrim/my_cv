@@ -70,4 +70,14 @@ class Skill
 
         return $this;
     }
+
+    public function getLevel(): string
+    {
+        return match (true) {
+            $this->percentage === null => 'unknown',
+            $this->percentage >= 80 => 'expert',
+            $this->percentage >= 50 => 'intermediate',
+            default => 'beginner',
+        };
+    }
 }

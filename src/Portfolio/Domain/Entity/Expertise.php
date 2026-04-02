@@ -55,6 +55,13 @@ class Expertise
         return $this;
     }
 
+    public function update(string $title, string $content, int $position): void
+    {
+        $this->title = $title;
+        $this->content = $content;
+        $this->position = $position;
+    }
+
     public function getPosition(): ?int
     {
         return $this->position;

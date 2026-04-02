@@ -23,4 +23,9 @@ final class PersonalInfoRepository extends ServiceEntityRepository implements Pe
     {
         return $this->findOneBy([]) ?? new PersonalInfo();
     }
+
+    public function findFirst(): ?PersonalInfo
+    {
+        return $this->findOneBy([]);
+    }
 }

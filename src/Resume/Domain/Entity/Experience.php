@@ -120,4 +120,9 @@ class Experience
 
         return $this;
     }
+
+    public function isCurrent(): bool
+    {
+        return $this->endDate === null;
+    }
 }

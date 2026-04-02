@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Contact\Presentation\Form\Step;
 
-use App\Contact\Domain\Dto\Step\ProjectDto;
+use App\Contact\Application\DTO\Step\ProjectDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

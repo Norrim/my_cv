@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Portfolio\Presentation\Controller;
 
-use App\Portfolio\Infrastructure\Doctrine\ExpertiseRepository;
+use App\Portfolio\Application\Command\UpdateExpertisesCommand;
+use App\Portfolio\Application\Handler\UpdateExpertisesHandler;
+use App\Portfolio\Domain\Repository\ExpertiseRepositoryInterface;
 use App\Portfolio\Presentation\Form\ExpertiseType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,8 +22,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class ExpertiseController extends AbstractController
 {
     public function __construct(
-        private readonly ExpertiseRepository $expertiseRepository,
-        private readonly EntityManagerInterface $em,
+        private readonly ExpertiseRepositoryInterface $expertiseRepository,
+        private readonly UpdateExpertisesHandler $handler,
         private readonly TranslatorInterface $translator,
     ) {}
 
@@ -46,19 +47,7 @@ final class ExpertiseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $existingExpertises = $this->expertiseRepository->findAll();
-            $submittedExpertises = $form->get('expertises')->getData();
-
-            foreach ($existingExpertises as $existingExpertise) {
-                if (!in_array($existingExpertise, $submittedExpertises, true)) {
-                    $this->em->remove($existingExpertise);
-                }
-            }
-
-            foreach ($submittedExpertises as $expertise) {
-                $this->em->persist($expertise);
-            }
-            $this->em->flush();
+            ($this->handler)(new UpdateExpertisesCommand($form->get('expertises')->getData()));
 
             $this->addFlash('success', $this->translator->trans('expertise.flash.updated', [], 'messages'));
 

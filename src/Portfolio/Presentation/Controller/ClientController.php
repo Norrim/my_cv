@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Portfolio\Presentation\Controller;
 
-use App\Portfolio\Application\Service\ClientFileUploader;
-use App\Portfolio\Infrastructure\Doctrine\ClientRepository;
+use App\Portfolio\Application\Command\UpdateClientsCommand;
+use App\Portfolio\Application\Handler\UpdateClientsHandler;
+use App\Portfolio\Domain\Repository\ClientRepositoryInterface;
 use App\Portfolio\Presentation\Form\ClientType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,9 +22,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class ClientController extends AbstractController
 {
     public function __construct(
-        private readonly ClientRepository $clientRepository,
-        private readonly EntityManagerInterface $em,
-        private readonly ClientFileUploader $fileUploader,
+        private readonly ClientRepositoryInterface $clientRepository,
+        private readonly UpdateClientsHandler $handler,
         private readonly TranslatorInterface $translator,
     ) {}
 
@@ -49,34 +48,14 @@ final class ClientController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $existingClients = $this->clientRepository->findAll();
             $submittedClients = $form->get('clients')->getData();
 
-            foreach ($existingClients as $existingClient) {
-                if (!in_array($existingClient, $submittedClients, true)) {
-                    if ($existingClient->getUrl()) {
-                        $this->fileUploader->remove(basename($existingClient->getUrl()));
-                    }
-                    $this->em->remove($existingClient);
-                }
-            }
-
+            $logoFiles = [];
             foreach ($submittedClients as $key => $client) {
-                $clientForm = $form->get('clients')->get((string) $key);
-                $logoFile = $clientForm->get('logo')->getData();
-
-                if ($logoFile) {
-                    if ($client->getUrl()) {
-                        $this->fileUploader->remove(basename($client->getUrl()));
-                    }
-
-                    $logoFileName = $this->fileUploader->upload($logoFile);
-                    $client->setUrl('uploads/images/clients/' . $logoFileName);
-                }
-
-                $this->em->persist($client);
+                $logoFiles[$key] = $form->get('clients')->get((string) $key)->get('logo')->getData();
             }
-            $this->em->flush();
+
+            ($this->handler)(new UpdateClientsCommand($submittedClients, $logoFiles));
 
             $this->addFlash('success', $this->translator->trans('client.flash.updated', [], 'messages'));
 

@@ -10,4 +10,7 @@ interface SocialRepositoryInterface
 {
     /** @return Social[] */
     public function findAllOrderedByPosition(): array;
+
+    /** @return Social[] */
+    public function findAll(): array;
 }

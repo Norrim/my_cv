@@ -123,6 +123,11 @@ class Education
         return $this;
     }
 
+    public function isCurrent(): bool
+    {
+        return $this->endDate === null;
+    }
+
     public function validateDates(ExecutionContextInterface $context): void
     {
         if ($this->endDate !== null && $this->startDate !== null && $this->endDate < $this->startDate) {

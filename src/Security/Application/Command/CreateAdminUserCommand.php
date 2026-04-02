@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Security\Presentation\Command;
+namespace App\Security\Application\Command;
 
 use App\Security\Domain\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
@@ -45,12 +45,8 @@ final class CreateAdminUserCommand extends Command
             return Command::FAILURE;
         }
 
-        $user = (new Users())
-            ->setEmail($email)
-            ->setRoles(['ROLE_ADMIN']);
-
-        $hashed = $this->passwordHasher->hashPassword($user, $plainPassword);
-        $user->setPassword($hashed);
+        $user = Users::createAdmin($email);
+        $user->upgradePassword($this->passwordHasher->hashPassword($user, $plainPassword));
 
         $this->em->persist($user);
         $this->em->flush();

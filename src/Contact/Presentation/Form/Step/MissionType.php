@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Contact\Presentation\Form\Step;
 
-use App\Contact\Domain\Dto\Step\MissionDto;
+use App\Contact\Application\DTO\Step\MissionDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;

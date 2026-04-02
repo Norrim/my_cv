@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Home\Presentation\Controller;
 
-use App\Contact\Application\Service\ContactMailerService;
-use App\Contact\Domain\Dto\ContactDataDto;
+use App\Contact\Infrastructure\Mailer\ContactMailerService;
+use App\Contact\Application\DTO\ContactDataDto;
 use App\Contact\Presentation\Form\ContactFlowType;
-use App\Identity\Infrastructure\Doctrine\PersonalInfoRepository;
-use App\Identity\Infrastructure\Doctrine\SocialRepository;
-use App\Portfolio\Infrastructure\Doctrine\ClientRepository;
-use App\Portfolio\Infrastructure\Doctrine\ExpertiseRepository;
-use App\Portfolio\Infrastructure\Doctrine\RecommendationRepository;
-use App\Resume\Infrastructure\Doctrine\EducationRepository;
-use App\Resume\Infrastructure\Doctrine\ExperienceRepository;
-use App\Resume\Infrastructure\Doctrine\SkillRepository;
+use App\Identity\Domain\Repository\PersonalInfoRepositoryInterface;
+use App\Identity\Domain\Repository\SocialRepositoryInterface;
+use App\Portfolio\Domain\Repository\ClientRepositoryInterface;
+use App\Portfolio\Domain\Repository\ExpertiseRepositoryInterface;
+use App\Portfolio\Domain\Repository\RecommendationRepositoryInterface;
+use App\Resume\Domain\Repository\EducationRepositoryInterface;
+use App\Resume\Domain\Repository\ExperienceRepositoryInterface;
+use App\Resume\Domain\Repository\SkillRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Flow\FormFlowInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,14 +24,14 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     public function __construct(
-        private readonly EducationRepository $educationRepository,
-        private readonly ExperienceRepository $experienceRepository,
-        private readonly SkillRepository $skillRepository,
-        private readonly SocialRepository $socialRepository,
-        private readonly PersonalInfoRepository $personalInfoRepository,
-        private readonly ClientRepository $clientRepository,
-        private readonly RecommendationRepository $recommendationRepository,
-        private readonly ExpertiseRepository $expertiseRepository,
+        private readonly EducationRepositoryInterface $educationRepository,
+        private readonly ExperienceRepositoryInterface $experienceRepository,
+        private readonly SkillRepositoryInterface $skillRepository,
+        private readonly SocialRepositoryInterface $socialRepository,
+        private readonly PersonalInfoRepositoryInterface $personalInfoRepository,
+        private readonly ClientRepositoryInterface $clientRepository,
+        private readonly RecommendationRepositoryInterface $recommendationRepository,
+        private readonly ExpertiseRepositoryInterface $expertiseRepository,
         private readonly ContactMailerService $contactMailer,
     ) {}
 
@@ -61,8 +61,8 @@ final class HomeController extends AbstractController
             'educations' => $this->educationRepository->findAllOrderedByPosition(),
             'experiences' => $this->experienceRepository->findAllOrderedByPosition(),
             'skills' => $this->skillRepository->findAllOrderedByPosition(),
-            'socials' => $this->socialRepository->findBy([], ['id' => 'ASC']),
-            'personalInfo' => $this->personalInfoRepository->findOneBy([]),
+            'socials' => $this->socialRepository->findAllOrderedByPosition(),
+            'personalInfo' => $this->personalInfoRepository->findFirst(),
             'clients' => $this->clientRepository->findAllOrderedByPosition(),
             'recommendations' => $this->recommendationRepository->findAllOrderedByPosition(),
             'expertises' => $this->expertiseRepository->findAllOrderedByPosition(),

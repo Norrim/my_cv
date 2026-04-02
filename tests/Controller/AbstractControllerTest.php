@@ -41,10 +41,8 @@ abstract class AbstractControllerTest extends WebTestCase
 
         if (!$user) {
             $hasher = self::getContainer()->get(UserPasswordHasherInterface::class);
-            $user = (new Users())
-                ->setEmail('test@example.com')
-                ->setRoles(['ROLE_ADMIN']);
-            $user->setPassword($hasher->hashPassword($user, 'password'));
+            $user = Users::createAdmin('test@example.com');
+            $user->upgradePassword($hasher->hashPassword($user, 'password'));
 
             $this->em->persist($user);
             $this->em->flush();

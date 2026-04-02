@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Portfolio\Presentation\Controller;
 
-use App\Portfolio\Application\Service\RecommendationFileUploader;
-use App\Portfolio\Infrastructure\Doctrine\RecommendationRepository;
+use App\Portfolio\Application\Command\UpdateRecommendationsCommand;
+use App\Portfolio\Application\Handler\UpdateRecommendationsHandler;
+use App\Portfolio\Domain\Repository\RecommendationRepositoryInterface;
 use App\Portfolio\Presentation\Form\RecommendationType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,9 +22,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class RecommendationController extends AbstractController
 {
     public function __construct(
-        private readonly RecommendationRepository $recommendationRepository,
-        private readonly EntityManagerInterface $em,
-        private readonly RecommendationFileUploader $fileUploader,
+        private readonly RecommendationRepositoryInterface $recommendationRepository,
+        private readonly UpdateRecommendationsHandler $handler,
         private readonly TranslatorInterface $translator,
     ) {}
 
@@ -48,34 +47,14 @@ final class RecommendationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $existingRecommendations = $this->recommendationRepository->findAll();
             $submittedRecommendations = $form->get('recommendations')->getData();
 
-            foreach ($existingRecommendations as $existingRecommendation) {
-                if (!in_array($existingRecommendation, $submittedRecommendations, true)) {
-                    if ($existingRecommendation->getImageUrl()) {
-                        $this->fileUploader->remove(basename($existingRecommendation->getImageUrl()));
-                    }
-                    $this->em->remove($existingRecommendation);
-                }
-            }
-
+            $imageFiles = [];
             foreach ($submittedRecommendations as $key => $recommendation) {
-                $recommendationForm = $form->get('recommendations')->get((string) $key);
-                $imageFile = $recommendationForm->get('image')->getData();
-
-                if ($imageFile) {
-                    if ($recommendation->getImageUrl()) {
-                        $this->fileUploader->remove(basename($recommendation->getImageUrl()));
-                    }
-
-                    $imageFileName = $this->fileUploader->upload($imageFile);
-                    $recommendation->setImageUrl('uploads/images/recommendations/' . $imageFileName);
-                }
-
-                $this->em->persist($recommendation);
+                $imageFiles[$key] = $form->get('recommendations')->get((string) $key)->get('image')->getData();
             }
-            $this->em->flush();
+
+            ($this->handler)(new UpdateRecommendationsCommand($submittedRecommendations, $imageFiles));
 
             $this->addFlash('success', $this->translator->trans('recommendation.flash.updated', [], 'messages'));
 

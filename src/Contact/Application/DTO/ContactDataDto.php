@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Contact\Domain\Dto;
+namespace App\Contact\Application\DTO;
 
-use App\Contact\Domain\Dto\Step\IdentityDto;
-use App\Contact\Domain\Dto\Step\MissionDto;
-use App\Contact\Domain\Dto\Step\ProjectDto;
+use App\Contact\Application\DTO\Step\IdentityDto;
+use App\Contact\Application\DTO\Step\MissionDto;
+use App\Contact\Application\DTO\Step\ProjectDto;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class ContactDataDto

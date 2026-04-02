@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Portfolio\Application\Service;
+namespace App\Portfolio\Infrastructure\Storage;
 
 use App\Shared\Infrastructure\Service\FileUploader;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-final readonly class RecommendationFileUploader extends FileUploader
+readonly class ClientFileUploader extends FileUploader
 {
     public function __construct(
-        #[Autowire('%recommendations_images_directory%')]
+        #[Autowire('%clients_logos_directory%')]
         string $targetDirectory,
         SluggerInterface $slugger,
     ) {

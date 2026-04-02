@@ -25,10 +25,8 @@ final class SecurityControllerTest extends WebTestCase
             $em->flush();
         }
 
-        $user = (new Users())
-            ->setEmail('test@example.com')
-            ->setRoles(['ROLE_ADMIN']);
-        $user->setPassword($hasher->hashPassword($user, 'password'));
+        $user = Users::createAdmin('test@example.com');
+        $user->upgradePassword($hasher->hashPassword($user, 'password'));
 
         $em->persist($user);
         $em->flush();

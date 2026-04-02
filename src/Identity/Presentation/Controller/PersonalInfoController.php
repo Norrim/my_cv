@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Identity\Presentation\Controller;
 
-use App\Identity\Domain\Entity\PersonalInfo;
-use App\Identity\Infrastructure\Doctrine\PersonalInfoRepository;
+use App\Identity\Application\Command\UpdatePersonalInfoCommand;
+use App\Identity\Application\Handler\UpdatePersonalInfoHandler;
+use App\Identity\Domain\Repository\PersonalInfoRepositoryInterface;
 use App\Identity\Presentation\Form\PersonalInfoType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +21,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class PersonalInfoController extends AbstractController
 {
     public function __construct(
-        private readonly PersonalInfoRepository $personalInfoRepository,
-        private readonly EntityManagerInterface $em,
+        private readonly PersonalInfoRepositoryInterface $personalInfoRepository,
+        private readonly UpdatePersonalInfoHandler $handler,
         private readonly TranslatorInterface $translator,
     ) {}
 
@@ -39,8 +39,7 @@ final class PersonalInfoController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($personalInfo);
-            $this->em->flush();
+            ($this->handler)(new UpdatePersonalInfoCommand($personalInfo));
 
             $this->addFlash('success', $this->translator->trans('personal_info.flash.updated', [], 'messages'));
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Contact\Application\Service;
+namespace App\Contact\Infrastructure\Mailer;
 
-use App\Contact\Domain\Dto\ContactDataDto;
+use App\Contact\Application\DTO\ContactDataDto;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Contact\Presentation\Form;
 
-use App\Contact\Domain\Dto\ContactDataDto;
+use App\Contact\Application\DTO\ContactDataDto;
 use App\Contact\Presentation\Form\Step\IdentityType;
 use App\Contact\Presentation\Form\Step\MissionType;
 use App\Contact\Presentation\Form\Step\ProjectType;

@@ -16,11 +16,13 @@ final class EntitiesTest extends TestCase
     public function testClient(): void
     {
         $client = new Client();
-        $client->setName('Client A')->setUrl('https://logo.com')->setPosition(1);
+        $client->setName('Client A')->setPosition(1);
+        $client->updateLogoUrl('https://logo.com');
 
         $this->assertSame('Client A', $client->getName());
         $this->assertSame('https://logo.com', $client->getUrl());
         $this->assertSame(1, $client->getPosition());
+        $this->assertTrue($client->hasLogo());
     }
 
     public function testExpertise(): void

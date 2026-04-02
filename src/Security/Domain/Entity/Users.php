@@ -49,12 +49,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-        return $this;
-    }
-
     /**
      * @return string[]
      */
@@ -66,15 +60,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
             $roles[] = 'ROLE_USER';
         }
         return array_values(array_unique($roles));
-    }
-
-    /**
-     * @param string[] $roles
-     */
-    public function setRoles(array $roles): self
-    {
-        $this->roles = array_values(array_unique($roles));
-        return $this;
     }
 
     public function addRole(string $role): self
@@ -90,10 +75,17 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function upgradePassword(string $hashedPassword): void
     {
-        $this->password = $password;
-        return $this;
+        $this->password = $hashedPassword;
     }
 
+    public static function createAdmin(string $email): self
+    {
+        $user = new self();
+        $user->email = $email;
+        $user->roles = ['ROLE_ADMIN'];
+
+        return $user;
+    }
 }

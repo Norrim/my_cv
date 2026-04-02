@@ -128,4 +128,9 @@ class PersonalInfo
 
         return $this;
     }
+
+    public function getFullName(): string
+    {
+        return trim(($this->firstname ?? '') . ' ' . ($this->name ?? ''));
+    }
 }

@@ -9,4 +9,6 @@ use App\Identity\Domain\Entity\PersonalInfo;
 interface PersonalInfoRepositoryInterface
 {
     public function findOneOrNew(): PersonalInfo;
+
+    public function findFirst(): ?PersonalInfo;
 }

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Identity\Presentation\Controller;
 
-use App\Identity\Infrastructure\Doctrine\SocialRepository;
+use App\Identity\Application\Command\UpdateSocialsCommand;
+use App\Identity\Application\Handler\UpdateSocialsHandler;
+use App\Identity\Domain\Repository\SocialRepositoryInterface;
 use App\Identity\Presentation\Form\SocialType;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,15 +22,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class SocialController extends AbstractController
 {
     public function __construct(
-        private readonly SocialRepository $socialRepository,
-        private readonly EntityManagerInterface $em,
+        private readonly SocialRepositoryInterface $socialRepository,
+        private readonly UpdateSocialsHandler $handler,
         private readonly TranslatorInterface $translator,
     ) {}
 
     #[Route('/edit-all', name: 'social_edit_all', methods: ['GET', 'POST'])]
     public function editAll(Request $request): Response
     {
-        $socials = $this->socialRepository->findBy([], ['position' => 'ASC']);
+        $socials = $this->socialRepository->findAllOrderedByPosition();
 
         $form = $this->createFormBuilder(['socials' => $socials])
             ->setAction($this->generateUrl('social_edit_all'))
@@ -46,21 +47,7 @@ final class SocialController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Get current socials from database
-            $existingSocials = $this->socialRepository->findAll();
-            $submittedSocials = $form->get('socials')->getData();
-
-            // Remove socials that are no longer in the submitted list
-            foreach ($existingSocials as $existingSocial) {
-                if (!in_array($existingSocial, $submittedSocials, true)) {
-                    $this->em->remove($existingSocial);
-                }
-            }
-
-            foreach ($submittedSocials as $social) {
-                $this->em->persist($social);
-            }
-            $this->em->flush();
+            ($this->handler)(new UpdateSocialsCommand($form->get('socials')->getData()));
 
             $this->addFlash('success', $this->translator->trans('social.flash.updated', [], 'messages'));
 

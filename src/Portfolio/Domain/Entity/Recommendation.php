@@ -75,11 +75,24 @@ class Recommendation
         return $this->imageUrl;
     }
 
-    public function setImageUrl(?string $imageUrl): self
+    public function hasImage(): bool
     {
-        $this->imageUrl = $imageUrl;
+        return $this->imageUrl !== null && $this->imageUrl !== '';
+    }
 
-        return $this;
+    public function getImageBasename(): ?string
+    {
+        return $this->hasImage() ? basename($this->imageUrl) : null;
+    }
+
+    public function updateImageUrl(string $imagePath): void
+    {
+        $this->imageUrl = $imagePath;
+    }
+
+    public function clearImageUrl(): void
+    {
+        $this->imageUrl = null;
     }
 
     public function getRecommandedAt(): ?\DateTimeInterface
