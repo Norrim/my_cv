@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
-use App\Entity\Experience;
+use App\Resume\Domain\Entity\Experience;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 

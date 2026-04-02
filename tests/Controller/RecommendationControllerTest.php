@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\Recommendation;
+use App\Portfolio\Domain\Entity\Recommendation;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class RecommendationControllerTest extends AbstractControllerTest

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\Social;
+use App\Identity\Domain\Entity\Social;
 
 final class SocialControllerTest extends AbstractControllerTest
 {

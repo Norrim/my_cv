@@ -14,12 +14,30 @@ doctrine:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
         auto_mapping: true
         mappings:
-            App:
+            Identity:
                 type: attribute
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+                dir: '%kernel.project_dir%/src/Identity/Domain/Entity'
+                prefix: 'App\Identity\Domain\Entity'
+                alias: Identity
+            Security:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Security/Domain/Entity'
+                prefix: 'App\Security\Domain\Entity'
+                alias: Security
+            Resume:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Resume/Domain/Entity'
+                prefix: 'App\Resume\Domain\Entity'
+                alias: Resume
+            Portfolio:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Portfolio/Domain/Entity'
+                prefix: 'App\Portfolio\Domain\Entity'
+                alias: Portfolio
 
 when@test:
     doctrine:

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\Users;
+use App\Security\Domain\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -25,10 +25,8 @@ final class SecurityControllerTest extends WebTestCase
             $em->flush();
         }
 
-        $user = (new Users())
-            ->setEmail('test@example.com')
-            ->setRoles(['ROLE_ADMIN']);
-        $user->setPassword($hasher->hashPassword($user, 'password'));
+        $user = Users::createAdmin('test@example.com');
+        $user->upgradePassword($hasher->hashPassword($user, 'password'));
 
         $em->persist($user);
         $em->flush();

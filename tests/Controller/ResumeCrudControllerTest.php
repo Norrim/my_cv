@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\Education;
-use App\Entity\Experience;
-use App\Entity\Expertise;
-use App\Entity\Recommendation;
-use App\Entity\Social;
-use App\Entity\PersonalInfo;
+use App\Identity\Domain\Entity\PersonalInfo;
+use App\Identity\Domain\Entity\Social;
+use App\Portfolio\Domain\Entity\Expertise;
+use App\Portfolio\Domain\Entity\Recommendation;
+use App\Resume\Domain\Entity\Education;
+use App\Resume\Domain\Entity\Experience;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class ResumeCrudControllerTest extends AbstractControllerTest

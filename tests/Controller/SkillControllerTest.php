@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\Skill;
+use App\Resume\Domain\Entity\Skill;
 
 final class SkillControllerTest extends AbstractControllerTest
 {

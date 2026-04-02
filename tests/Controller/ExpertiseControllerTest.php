@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\Expertise;
+use App\Portfolio\Domain\Entity\Expertise;
 
 final class ExpertiseControllerTest extends AbstractControllerTest
 {
