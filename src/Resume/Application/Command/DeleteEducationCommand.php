@@ -10,6 +10,5 @@ final readonly class DeleteEducationCommand
 {
     public function __construct(
         public Education $education,
-    ) {
-    }
+    ) {}
 }

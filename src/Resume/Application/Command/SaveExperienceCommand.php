@@ -10,6 +10,5 @@ final readonly class SaveExperienceCommand
 {
     public function __construct(
         public Experience $experience,
-    ) {
-    }
+    ) {}
 }

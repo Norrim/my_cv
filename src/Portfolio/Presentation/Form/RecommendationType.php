@@ -60,10 +60,9 @@ final class RecommendationType extends AbstractType
                             'image/png',
                         ],
                         mimeTypesMessage: 'Veuillez uploader une image valide (JPG, PNG)',
-                    )
+                    ),
                 ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

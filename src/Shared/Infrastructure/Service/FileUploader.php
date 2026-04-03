@@ -22,20 +22,18 @@ readonly class FileUploader
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = (string) $this->slugger->slug($originalFilename);
 
-        $ext = $file->guessExtension()
-            ?? $file->getClientOriginalExtension()
-            ?: 'bin';
+        $ext = $file->guessExtension() ?? $file->getClientOriginalExtension() ?: 'bin';
 
         $fileName = $safeFilename . '-' . uniqid('', true) . '.' . $file->guessExtension();
 
         try {
             $file->move($this->targetDirectory, $fileName);
         } catch (\Throwable $e) {
-            throw new FileException(sprintf(
-                'Could not upload file to "%s": %s',
-                $this->targetDirectory,
-                $e->getMessage()
-            ), 0, $e);
+            throw new FileException(
+                sprintf('Could not upload file to "%s": %s', $this->targetDirectory, $e->getMessage()),
+                0,
+                $e,
+            );
         }
 
         return $fileName;
@@ -68,10 +66,7 @@ readonly class FileUploader
 
         if (is_dir($dir)) {
             if (!is_writable($dir)) {
-                throw new FileException(sprintf(
-                    'Upload directory "%s" is not writable by the PHP process.',
-                    $dir
-                ));
+                throw new FileException(sprintf('Upload directory "%s" is not writable by the PHP process.', $dir));
             }
 
             return;
@@ -89,14 +84,14 @@ readonly class FileUploader
                 'Upload directory "%s" could not be created. Parent "%s" must be writable. %s',
                 $dir,
                 $parentDir,
-                $err['message'] ?? ''
+                $err['message'] ?? '',
             ));
         }
 
         if (!is_writable($dir)) {
             throw new FileException(sprintf(
                 'Upload directory "%s" was created but is not writable by the PHP process.',
-                $dir
+                $dir,
             ));
         }
     }

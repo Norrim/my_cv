@@ -11,8 +11,7 @@ final readonly class DeleteSkillHandler
 {
     public function __construct(
         private EntityManagerInterface $em,
-    ) {
-    }
+    ) {}
 
     public function __invoke(DeleteSkillCommand $command): void
     {

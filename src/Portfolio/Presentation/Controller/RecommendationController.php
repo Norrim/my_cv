@@ -32,7 +32,8 @@ final class RecommendationController extends AbstractController
     {
         $recommendations = $this->recommendationRepository->findAllOrderedByPosition();
 
-        $form = $this->createFormBuilder(['recommendations' => $recommendations])
+        $form = $this
+            ->createFormBuilder(['recommendations' => $recommendations])
             ->setAction($this->generateUrl('recommendation_edit_all'))
             ->setMethod('POST')
             ->add('recommendations', CollectionType::class, [
@@ -51,7 +52,11 @@ final class RecommendationController extends AbstractController
 
             $imageFiles = [];
             foreach ($submittedRecommendations as $key => $recommendation) {
-                $imageFiles[$key] = $form->get('recommendations')->get((string) $key)->get('image')->getData();
+                $imageFiles[$key] = $form
+                    ->get('recommendations')
+                    ->get((string) $key)
+                    ->get('image')
+                    ->getData();
             }
 
             ($this->handler)(new UpdateRecommendationsCommand($submittedRecommendations, $imageFiles));
@@ -65,14 +70,16 @@ final class RecommendationController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $status = ($form->isSubmitted() && !$form->isValid())
-            ? Response::HTTP_UNPROCESSABLE_ENTITY
-            : Response::HTTP_OK;
+        $status = $form->isSubmitted() && !$form->isValid() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK;
 
-        return $this->render('about/recommendation/_form_modal_content.html.twig', [
-            'form' => $form->createView(),
-            'title' => $this->translator->trans('recommendation.modal.title', [], 'messages'),
-            'submit_label' => 'global.save',
-        ], new Response(null, $status));
+        return $this->render(
+            'about/recommendation/_form_modal_content.html.twig',
+            [
+                'form' => $form->createView(),
+                'title' => $this->translator->trans('recommendation.modal.title', [], 'messages'),
+                'submit_label' => 'global.save',
+            ],
+            new Response(null, $status),
+        );
     }
 }

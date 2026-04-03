@@ -16,20 +16,16 @@ final class ExpertiseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('title', TextType::class, [
-                'label' => 'expertise.form.title.label',
-                'attr' => ['class' => 'input form-control'],
-            ])
-            ->add('content', TextareaType::class, [
-                'label' => 'expertise.form.content.label',
-                'attr' => ['class' => 'input form-control', 'rows' => 3],
-            ])
-            ->add('position', IntegerType::class, [
-                'label' => 'expertise.form.position.label',
-                'attr' => ['class' => 'input form-control'],
-            ])
-        ;
+        $builder->add('title', TextType::class, [
+            'label' => 'expertise.form.title.label',
+            'attr' => ['class' => 'input form-control'],
+        ])->add('content', TextareaType::class, [
+            'label' => 'expertise.form.content.label',
+            'attr' => ['class' => 'input form-control', 'rows' => 3],
+        ])->add('position', IntegerType::class, [
+            'label' => 'expertise.form.position.label',
+            'attr' => ['class' => 'input form-control'],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

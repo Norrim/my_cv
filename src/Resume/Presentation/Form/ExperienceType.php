@@ -42,8 +42,7 @@ final class ExperienceType extends AbstractType
             ])
             ->add('position', IntegerType::class, [
                 'label' => 'experience.form.position',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

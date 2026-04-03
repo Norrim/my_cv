@@ -11,8 +11,7 @@ final readonly class SaveSkillHandler
 {
     public function __construct(
         private EntityManagerInterface $em,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SaveSkillCommand $command): void
     {

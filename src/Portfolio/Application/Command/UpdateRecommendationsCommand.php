@@ -16,6 +16,5 @@ final readonly class UpdateRecommendationsCommand
     public function __construct(
         public array $submittedRecommendations,
         public array $imageFiles = [],
-    ) {
-    }
+    ) {}
 }

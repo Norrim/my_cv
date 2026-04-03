@@ -11,8 +11,7 @@ final readonly class SaveEducationHandler
 {
     public function __construct(
         private EntityManagerInterface $em,
-    ) {
-    }
+    ) {}
 
     public function __invoke(SaveEducationCommand $command): void
     {

@@ -11,8 +11,7 @@ final readonly class DeleteExperienceHandler
 {
     public function __construct(
         private EntityManagerInterface $em,
-    ) {
-    }
+    ) {}
 
     public function __invoke(DeleteExperienceCommand $command): void
     {

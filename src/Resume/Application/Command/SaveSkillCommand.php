@@ -10,6 +10,5 @@ final readonly class SaveSkillCommand
 {
     public function __construct(
         public Skill $skill,
-    ) {
-    }
+    ) {}
 }

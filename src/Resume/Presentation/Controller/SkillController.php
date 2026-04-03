@@ -52,15 +52,17 @@ final class SkillController extends AbstractController
             return $this->redirectToRoute('app_home', ['_fragment' => 'resume']);
         }
 
-        $status = ($form->isSubmitted() && !$form->isValid())
-            ? Response::HTTP_UNPROCESSABLE_ENTITY
-            : Response::HTTP_OK;
+        $status = $form->isSubmitted() && !$form->isValid() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK;
 
-        return $this->render('resume/skill/_form_modal_content.html.twig', [
-            'form' => $form->createView(),
-            'title' => $this->translator->trans('crud.modal.new', ['%label%' => $label]),
-            'submit_label' => 'global.save',
-        ], new Response(null, $status));
+        return $this->render(
+            'resume/skill/_form_modal_content.html.twig',
+            [
+                'form' => $form->createView(),
+                'title' => $this->translator->trans('crud.modal.new', ['%label%' => $label]),
+                'submit_label' => 'global.save',
+            ],
+            new Response(null, $status),
+        );
     }
 
     #[Route('/{id}/edit', name: 'skill_edit', requirements: ['id' => '\\d+'], methods: ['GET', 'POST'])]
@@ -86,15 +88,17 @@ final class SkillController extends AbstractController
             return $this->redirectToRoute('app_home', ['_fragment' => 'resume']);
         }
 
-        $status = ($form->isSubmitted() && !$form->isValid())
-            ? Response::HTTP_UNPROCESSABLE_ENTITY
-            : Response::HTTP_OK;
+        $status = $form->isSubmitted() && !$form->isValid() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK;
 
-        return $this->render('resume/skill/_form_modal_content.html.twig', [
-            'form' => $form->createView(),
-            'title' => $this->translator->trans('crud.modal.edit', ['%label%' => $label]),
-            'submit_label' => 'global.save',
-        ], new Response(null, $status));
+        return $this->render(
+            'resume/skill/_form_modal_content.html.twig',
+            [
+                'form' => $form->createView(),
+                'title' => $this->translator->trans('crud.modal.edit', ['%label%' => $label]),
+                'submit_label' => 'global.save',
+            ],
+            new Response(null, $status),
+        );
     }
 
     #[Route('/{id}/delete', name: 'skill_delete', requirements: ['id' => '\\d+'], methods: ['POST'])]

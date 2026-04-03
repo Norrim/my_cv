@@ -17,30 +17,26 @@ final class ClientType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('name', TextType::class, [
-                'label' => 'Nom du client',
-            ])
-            ->add('position', IntegerType::class, [
-                'label' => 'Position',
-            ])
-            ->add('logo', FileType::class, [
-                'label' => 'Logo (image)',
-                'mapped' => false,
-                'required' => $options['require_logo'],
-                'constraints' => [
-                    new File(
-                        maxSize: '2M',
-                        mimeTypes: [
-                            'image/jpeg',
-                            'image/png',
-                            'image/svg+xml',
-                        ],
-                        mimeTypesMessage: 'Veuillez uploader une image valide (JPG, PNG, SVG)',
-                    )
-                ],
-            ])
-        ;
+        $builder->add('name', TextType::class, [
+            'label' => 'Nom du client',
+        ])->add('position', IntegerType::class, [
+            'label' => 'Position',
+        ])->add('logo', FileType::class, [
+            'label' => 'Logo (image)',
+            'mapped' => false,
+            'required' => $options['require_logo'],
+            'constraints' => [
+                new File(
+                    maxSize: '2M',
+                    mimeTypes: [
+                        'image/jpeg',
+                        'image/png',
+                        'image/svg+xml',
+                    ],
+                    mimeTypesMessage: 'Veuillez uploader une image valide (JPG, PNG, SVG)',
+                ),
+            ],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

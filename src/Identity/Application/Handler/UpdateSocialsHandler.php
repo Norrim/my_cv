@@ -15,8 +15,7 @@ final readonly class UpdateSocialsHandler
     public function __construct(
         private SocialRepositoryInterface $socialRepository,
         private EntityManagerInterface $em,
-    ) {
-    }
+    ) {}
 
     public function __invoke(UpdateSocialsCommand $command): void
     {

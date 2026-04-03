@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Portfolio\Application\Handler;
 
 use App\Portfolio\Application\Command\UpdateClientsCommand;
-use App\Portfolio\Infrastructure\Storage\ClientFileUploader;
 use App\Portfolio\Domain\Repository\ClientRepositoryInterface;
+use App\Portfolio\Infrastructure\Storage\ClientFileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 
 use function in_array;
@@ -17,8 +17,7 @@ final readonly class UpdateClientsHandler
         private ClientRepositoryInterface $clientRepository,
         private EntityManagerInterface $em,
         private ClientFileUploader $fileUploader,
-    ) {
-    }
+    ) {}
 
     public function __invoke(UpdateClientsCommand $command): void
     {
@@ -42,7 +41,7 @@ final readonly class UpdateClientsHandler
                 }
 
                 $logoFileName = $this->fileUploader->upload($logoFile);
-                $client->updateLogoUrl('uploads/images/clients/'.$logoFileName);
+                $client->updateLogoUrl('uploads/images/clients/' . $logoFileName);
             }
 
             $this->em->persist($client);

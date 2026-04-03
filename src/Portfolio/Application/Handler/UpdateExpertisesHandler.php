@@ -15,8 +15,7 @@ final readonly class UpdateExpertisesHandler
     public function __construct(
         private ExpertiseRepositoryInterface $expertiseRepository,
         private EntityManagerInterface $em,
-    ) {
-    }
+    ) {}
 
     public function __invoke(UpdateExpertisesCommand $command): void
     {

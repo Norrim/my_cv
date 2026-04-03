@@ -32,7 +32,8 @@ final class SocialController extends AbstractController
     {
         $socials = $this->socialRepository->findAllOrderedByPosition();
 
-        $form = $this->createFormBuilder(['socials' => $socials])
+        $form = $this
+            ->createFormBuilder(['socials' => $socials])
             ->setAction($this->generateUrl('social_edit_all'))
             ->setMethod('POST')
             ->add('socials', CollectionType::class, [
@@ -58,14 +59,16 @@ final class SocialController extends AbstractController
             return $this->redirectToRoute('app_home', ['_fragment' => 'resume']);
         }
 
-        $status = ($form->isSubmitted() && !$form->isValid())
-            ? Response::HTTP_UNPROCESSABLE_ENTITY
-            : Response::HTTP_OK;
+        $status = $form->isSubmitted() && !$form->isValid() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK;
 
-        return $this->render('social/_form_modal_content.html.twig', [
-            'form' => $form->createView(),
-            'title' => $this->translator->trans('social.modal.title', [], 'messages'),
-            'submit_label' => 'global.save',
-        ], new Response(null, $status));
+        return $this->render(
+            'social/_form_modal_content.html.twig',
+            [
+                'form' => $form->createView(),
+                'title' => $this->translator->trans('social.modal.title', [], 'messages'),
+                'submit_label' => 'global.save',
+            ],
+            new Response(null, $status),
+        );
     }
 }

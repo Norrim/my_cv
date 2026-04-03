@@ -10,6 +10,5 @@ final readonly class UpdatePersonalInfoCommand
 {
     public function __construct(
         public PersonalInfo $personalInfo,
-    ) {
-    }
+    ) {}
 }

@@ -10,6 +10,5 @@ final readonly class SaveEducationCommand
 {
     public function __construct(
         public Education $education,
-    ) {
-    }
+    ) {}
 }

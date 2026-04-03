@@ -10,6 +10,5 @@ final readonly class DeleteExperienceCommand
 {
     public function __construct(
         public Experience $experience,
-    ) {
-    }
+    ) {}
 }

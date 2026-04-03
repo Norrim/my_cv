@@ -32,7 +32,8 @@ final class ClientController extends AbstractController
     {
         $clients = $this->clientRepository->findAllOrderedByPosition();
 
-        $form = $this->createFormBuilder(['clients' => $clients])
+        $form = $this
+            ->createFormBuilder(['clients' => $clients])
             ->setAction($this->generateUrl('client_edit_all'))
             ->setMethod('POST')
             ->add('clients', CollectionType::class, [
@@ -52,7 +53,11 @@ final class ClientController extends AbstractController
 
             $logoFiles = [];
             foreach ($submittedClients as $key => $client) {
-                $logoFiles[$key] = $form->get('clients')->get((string) $key)->get('logo')->getData();
+                $logoFiles[$key] = $form
+                    ->get('clients')
+                    ->get((string) $key)
+                    ->get('logo')
+                    ->getData();
             }
 
             ($this->handler)(new UpdateClientsCommand($submittedClients, $logoFiles));
@@ -66,14 +71,16 @@ final class ClientController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $status = ($form->isSubmitted() && !$form->isValid())
-            ? Response::HTTP_UNPROCESSABLE_ENTITY
-            : Response::HTTP_OK;
+        $status = $form->isSubmitted() && !$form->isValid() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK;
 
-        return $this->render('about/client/_form_modal_content.html.twig', [
-            'form' => $form->createView(),
-            'title' => $this->translator->trans('client.modal.title', [], 'messages'),
-            'submit_label' => 'global.save',
-        ], new Response(null, $status));
+        return $this->render(
+            'about/client/_form_modal_content.html.twig',
+            [
+                'form' => $form->createView(),
+                'title' => $this->translator->trans('client.modal.title', [], 'messages'),
+                'submit_label' => 'global.save',
+            ],
+            new Response(null, $status),
+        );
     }
 }

@@ -17,19 +17,16 @@ final class ContactNavigatorType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('previous', PreviousFlowType::class, [
-                'label' => 'contact.wizard.previous',
-                'include_if' => fn (FormFlowCursor $cursor): bool => !$cursor->isFirstStep(),
-            ])
-            ->add('next', NextFlowType::class, [
-                'label' => 'contact.wizard.next',
-                'include_if' => fn (FormFlowCursor $cursor): bool => !$cursor->isLastStep(),
-            ])
-            ->add('finish', FinishFlowType::class, [
-                'label' => 'contact.wizard.send',
-                'include_if' => fn (FormFlowCursor $cursor): bool => $cursor->isLastStep(),
-            ]);
+        $builder->add('previous', PreviousFlowType::class, [
+            'label' => 'contact.wizard.previous',
+            'include_if' => fn(FormFlowCursor $cursor): bool => !$cursor->isFirstStep(),
+        ])->add('next', NextFlowType::class, [
+            'label' => 'contact.wizard.next',
+            'include_if' => fn(FormFlowCursor $cursor): bool => !$cursor->isLastStep(),
+        ])->add('finish', FinishFlowType::class, [
+            'label' => 'contact.wizard.send',
+            'include_if' => fn(FormFlowCursor $cursor): bool => $cursor->isLastStep(),
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

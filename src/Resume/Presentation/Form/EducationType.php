@@ -42,8 +42,7 @@ final class EducationType extends AbstractType
             ])
             ->add('position', IntegerType::class, [
                 'label' => 'education.form.position',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

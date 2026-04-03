@@ -48,8 +48,7 @@ final class PersonalInfoType extends AbstractType
                     'rows' => 10,
                     'class' => 'tinymce',
                 ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

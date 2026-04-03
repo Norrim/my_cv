@@ -11,6 +11,5 @@ final readonly class UpdateExpertisesCommand
     /** @param Expertise[] $submittedExpertises */
     public function __construct(
         public array $submittedExpertises,
-    ) {
-    }
+    ) {}
 }

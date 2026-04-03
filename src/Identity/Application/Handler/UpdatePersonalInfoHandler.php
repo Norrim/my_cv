@@ -11,8 +11,7 @@ final readonly class UpdatePersonalInfoHandler
 {
     public function __construct(
         private EntityManagerInterface $em,
-    ) {
-    }
+    ) {}
 
     public function __invoke(UpdatePersonalInfoCommand $command): void
     {

@@ -131,7 +131,8 @@ class Education
     public function validateDates(ExecutionContextInterface $context): void
     {
         if ($this->endDate !== null && $this->startDate !== null && $this->endDate < $this->startDate) {
-            $context->buildViolation('La date de fin ne peut pas être antérieure à la date de début.')
+            $context
+                ->buildViolation('La date de fin ne peut pas être antérieure à la date de début.')
                 ->atPath('endDate')
                 ->addViolation();
         }

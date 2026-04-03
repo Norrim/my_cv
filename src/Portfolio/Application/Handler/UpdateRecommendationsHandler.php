@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Portfolio\Application\Handler;
 
 use App\Portfolio\Application\Command\UpdateRecommendationsCommand;
-use App\Portfolio\Infrastructure\Storage\RecommendationFileUploader;
 use App\Portfolio\Domain\Repository\RecommendationRepositoryInterface;
+use App\Portfolio\Infrastructure\Storage\RecommendationFileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 
 use function in_array;
@@ -17,8 +17,7 @@ final readonly class UpdateRecommendationsHandler
         private RecommendationRepositoryInterface $recommendationRepository,
         private EntityManagerInterface $em,
         private RecommendationFileUploader $fileUploader,
-    ) {
-    }
+    ) {}
 
     public function __invoke(UpdateRecommendationsCommand $command): void
     {
@@ -42,7 +41,7 @@ final readonly class UpdateRecommendationsHandler
                 }
 
                 $imageFileName = $this->fileUploader->upload($imageFile);
-                $recommendation->updateImageUrl('uploads/images/recommendations/'.$imageFileName);
+                $recommendation->updateImageUrl('uploads/images/recommendations/' . $imageFileName);
             }
 
             $this->em->persist($recommendation);

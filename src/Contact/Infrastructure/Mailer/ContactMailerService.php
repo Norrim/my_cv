@@ -26,8 +26,10 @@ final class ContactMailerService
 
     public function __construct(
         private readonly MailerInterface $mailer,
-        #[Autowire('%env(CONTACT_EMAIL)%')] private readonly string $contactEmail,
-        #[Autowire('%env(CONTACT_FROM_EMAIL)%')] private readonly string $fromEmail,
+        #[Autowire('%env(CONTACT_EMAIL)%')]
+        private readonly string $contactEmail,
+        #[Autowire('%env(CONTACT_FROM_EMAIL)%')]
+        private readonly string $fromEmail,
     ) {}
 
     public function send(ContactDataDto $data): void
@@ -63,7 +65,7 @@ final class ContactMailerService
             'Message libre : ' . ($project->freeMessage ?: 'N/A'),
         ]);
 
-        $email = (new Email())
+        $email = new Email()
             ->from(new Address($this->fromEmail))
             ->to($this->contactEmail)
             ->replyTo(new Address((string) $identity->email, $identity->firstName . ' ' . $identity->lastName))

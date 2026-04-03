@@ -13,10 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-#[AsCommand(
-    name: 'app:create-admin',
-    description: 'Create an admin user (ROLE_ADMIN)'
-)]
+#[AsCommand(name: 'app:create-admin', description: 'Create an admin user (ROLE_ADMIN)')]
 final class CreateAdminUserCommand extends Command
 {
     public function __construct(
@@ -28,9 +25,11 @@ final class CreateAdminUserCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->addArgument('email', InputArgument::REQUIRED, 'Admin email')
-            ->addArgument('password', InputArgument::REQUIRED, 'Plain password');
+        $this->addArgument('email', InputArgument::REQUIRED, 'Admin email')->addArgument(
+            'password',
+            InputArgument::REQUIRED,
+            'Plain password',
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

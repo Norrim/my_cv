@@ -16,21 +16,16 @@ final class SocialType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('name', TextType::class, [
-                'label' => 'social.form.name',
-            ])
-            ->add('url', UrlType::class, [
-                'label' => 'social.form.url',
-            ])
-            ->add('iconClass', TextType::class, [
-                'label' => 'social.form.icon_class',
-                'help' => 'ex: feathericon-linkedin (feathericons.com)',
-            ])
-            ->add('position', IntegerType::class, [
-                'label' => 'social.form.position',
-            ])
-        ;
+        $builder->add('name', TextType::class, [
+            'label' => 'social.form.name',
+        ])->add('url', UrlType::class, [
+            'label' => 'social.form.url',
+        ])->add('iconClass', TextType::class, [
+            'label' => 'social.form.icon_class',
+            'help' => 'ex: feathericon-linkedin (feathericons.com)',
+        ])->add('position', IntegerType::class, [
+            'label' => 'social.form.position',
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

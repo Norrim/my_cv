@@ -16,6 +16,5 @@ final readonly class UpdateClientsCommand
     public function __construct(
         public array $submittedClients,
         public array $logoFiles = [],
-    ) {
-    }
+    ) {}
 }

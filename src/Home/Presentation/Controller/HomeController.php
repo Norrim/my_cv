@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Home\Presentation\Controller;
 
-use App\Contact\Infrastructure\Mailer\ContactMailerService;
 use App\Contact\Application\DTO\ContactDataDto;
+use App\Contact\Infrastructure\Mailer\ContactMailerService;
 use App\Contact\Presentation\Form\ContactFlowType;
 use App\Identity\Domain\Repository\PersonalInfoRepositoryInterface;
 use App\Identity\Domain\Repository\SocialRepositoryInterface;
@@ -41,8 +41,7 @@ final class HomeController extends AbstractController
         $contactData = new ContactDataDto();
 
         /** @var FormFlowInterface $flow */
-        $flow = $this->createForm(ContactFlowType::class, $contactData)
-            ->handleRequest($request);
+        $flow = $this->createForm(ContactFlowType::class, $contactData)->handleRequest($request);
 
         $contactFormActive = $flow->isSubmitted();
 

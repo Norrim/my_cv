@@ -16,22 +16,18 @@ final class SkillType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('name', TextType::class, [
-                'label' => 'skill.form.name',
-            ])
-            ->add('percentage', RangeType::class, [
-                'label' => 'skill.form.percentage',
-                'attr' => [
-                    'min' => 0,
-                    'max' => 100,
-                    'step' => 1,
-                ],
-            ])
-            ->add('position', IntegerType::class, [
-                'label' => 'skill.form.position',
-            ])
-        ;
+        $builder->add('name', TextType::class, [
+            'label' => 'skill.form.name',
+        ])->add('percentage', RangeType::class, [
+            'label' => 'skill.form.percentage',
+            'attr' => [
+                'min' => 0,
+                'max' => 100,
+                'step' => 1,
+            ],
+        ])->add('position', IntegerType::class, [
+            'label' => 'skill.form.position',
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

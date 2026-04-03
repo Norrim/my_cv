@@ -11,6 +11,5 @@ final readonly class UpdateSocialsCommand
     /** @param Social[] $submittedSocials */
     public function __construct(
         public array $submittedSocials,
-    ) {
-    }
+    ) {}
 }

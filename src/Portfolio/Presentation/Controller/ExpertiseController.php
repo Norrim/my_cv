@@ -32,7 +32,8 @@ final class ExpertiseController extends AbstractController
     {
         $expertises = $this->expertiseRepository->findAllOrderedByPosition();
 
-        $form = $this->createFormBuilder(['expertises' => $expertises])
+        $form = $this
+            ->createFormBuilder(['expertises' => $expertises])
             ->setAction($this->generateUrl('expertise_edit_all'))
             ->setMethod('POST')
             ->add('expertises', CollectionType::class, [
@@ -58,14 +59,16 @@ final class ExpertiseController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $status = ($form->isSubmitted() && !$form->isValid())
-            ? Response::HTTP_UNPROCESSABLE_ENTITY
-            : Response::HTTP_OK;
+        $status = $form->isSubmitted() && !$form->isValid() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK;
 
-        return $this->render('about/expertise/_form_modal_content.html.twig', [
-            'form' => $form->createView(),
-            'title' => $this->translator->trans('expertise.modal.title', [], 'messages'),
-            'submit_label' => 'global.save',
-        ], new Response(null, $status));
+        return $this->render(
+            'about/expertise/_form_modal_content.html.twig',
+            [
+                'form' => $form->createView(),
+                'title' => $this->translator->trans('expertise.modal.title', [], 'messages'),
+                'submit_label' => 'global.save',
+            ],
+            new Response(null, $status),
+        );
     }
 }

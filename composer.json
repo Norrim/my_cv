@@ -93,6 +93,7 @@
         }
     },
     "require-dev": {
+        "carthage-software/mago": "^1.18.1",
         "friendsofphp/php-cs-fixer": "^3.94.2",
         "phpstan/phpstan": "^2.1.40",
         "phpstan/phpstan-doctrine": "^2.0.20",

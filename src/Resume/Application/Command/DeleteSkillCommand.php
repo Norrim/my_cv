@@ -10,6 +10,5 @@ final readonly class DeleteSkillCommand
 {
     public function __construct(
         public Skill $skill,
-    ) {
-    }
+    ) {}
 }
